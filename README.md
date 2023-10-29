@@ -188,4 +188,4 @@ Libraries:
 
 ## Dashboard ![Dashboard Logo](Images/Dashboard_Icon.png)
 
-### Streamlit ![Streamlit Logo](Images/Streamlit_Icon_Red.png)
+### Streamlit ![Streamlit Logo](Images/Streamlit_Icon.png)

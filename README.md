@@ -169,7 +169,7 @@ Build a travel classifier based on their environmental impact (high, medium, or 
 
 ## EDA
 
-### Python 3.8 ![Python Logo](Images/Python_Icon.png)
+### ![Python Logo](Images/Python_Icon.png) Python 3.8
 Libraries:
 - Pandas
 - Matplotlib
@@ -180,12 +180,12 @@ Libraries:
 
 ## Data Warehouse
 
-### Amazon S3 ![Amazon S3 Logo](Images/Amazon_S3_Icon.png)
+### ![Amazon S3 Logo](Images/Amazon_S3_Icon.png) Amazon S3
 
 ## Database
 
-### Amazon Aurora MySQL ![Amazon S3 Logo](Images/Amazon_S3_Icon.png)
+### ![Amazon S3 Logo](Images/Amazon_S3_Icon.png) Amazon Aurora MySQL
 
 ## Dashboard
 
-### Streamlit ![Streamlit Logo](Images/Streamlit_Icon.png)
+### ![Streamlit Logo](Images/Streamlit_Icon.png) Streamlit

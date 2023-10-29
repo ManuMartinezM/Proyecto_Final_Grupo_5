@@ -22,6 +22,8 @@ As we progress through our analysis, we will diligently record and share our fin
 
 # KPIs
 
+![KPI](Images/KPI.png)
+
 ## KPI 1: 5% increase in demand for the type of service contracted
 
 ### Description:
@@ -93,6 +95,8 @@ Achieve a 5% reduction in carbon emissions by comparing the Top 10 electric cars
 Emissions reduction for transportation is as crucial as economic profitability.
 
 # Datasets (EDA)
+
+![EDA](Images/EDA.png)
 
 ## Technical information about the various available vehicle models:
 
@@ -166,6 +170,7 @@ Build a travel classifier based on their environmental impact (high, medium, or 
 
 # Tech Stack
 
+![Tech Stack](Images/Tech_Stack.jpg)
 
 ## EDA
 

@@ -164,7 +164,7 @@ Downloaded from the NYC Taxi and Limousine Commission website. All datasets cont
 
 Build a travel classifier based on their environmental impact (high, medium, or low) to establish a differential fare system to encourage the use of environmentally low-impact modes of transportation.
 
-# Tech Stack ![Tech Stack Logo](Images/Tech_Stack_Icon.png)
+# Tech Stack
 
 
 ## EDA
@@ -178,14 +178,14 @@ Libraries:
 - Plotly
 - DateTime
 
-## Data Warehouse ![Data Warehouse Logo](Images/Data_Warehouse_Icon.png)
+## Data Warehouse
 
 ### Amazon S3 ![Amazon S3 Logo](Images/Amazon_S3_Icon.png)
 
-## Database ![Database Logo](Images/Database_Icon.png)
+## Database
 
 ### Amazon Aurora MySQL ![Amazon S3 Logo](Images/Amazon_S3_Icon.png)
 
-## Dashboard ![Dashboard Logo](Images/Dashboard_Icon.png)
+## Dashboard
 
 ### Streamlit ![Streamlit Logo](Images/Streamlit_Icon.png)

@@ -2,6 +2,7 @@ USE NYC_TAXIS;
 
 drop table if exists vehicle_fuel_economy;
 CREATE TABLE if not exists vehicle_fuel_economy(
+    ID INT PRIMARY KEY,
     Model VARCHAR(50),
     Co2 FLOAT(6,2));
 

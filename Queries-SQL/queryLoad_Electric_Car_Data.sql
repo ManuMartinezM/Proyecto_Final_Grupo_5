@@ -1,0 +1,19 @@
+DROP DATABASE IF EXISTS NYC_TAXIS;
+CREATE DATABASE IF NOT EXISTS NYC_TAXIS;
+USE NYC_TAXIS;
+
+DROP TABLE IF EXISTS electric_car_data;
+CREATE TABLE IF NOT EXISTS electric_car_data (
+	Brand VARCHAR(255),
+    Model VARCHAR(255),
+    PriceUSD DECIMAL(10, 2)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\filtered_electric_car_data.csv' 
+INTO TABLE electric_car_data
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
+
+SELECT * FROM electric_car_data;

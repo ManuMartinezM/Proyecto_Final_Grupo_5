@@ -4,7 +4,18 @@ import argparse
 
 
 def main(source, destination, service_type):
-    df = get_clean_df(source, service_type)
+    df = pd.read_csv(source)
+
+    clean_df(df, service_type)
+
+    df.to_csv(destination, index=False)
+    print("Resultados guardados en", destination)
+
+
+def clean_df(df, service_type):
+    df = standardize_df_fields(df, service_type)
+
+    df.dropna(how='any', inplace=True)
 
     df['year'] = df.apply(
         lambda f: get_year(f['pickup_datetime']), axis=1)
@@ -17,10 +28,6 @@ def main(source, destination, service_type):
     df['do_time'] = df.apply(
         lambda f: get_DO_time(f['dropoff_datetime']), axis=1)
 
-    if not 'passenger_count' in df.columns:
-        # Some service types do not include the passenger count field - for these, we assume there was a single passenger
-        df['passenger_count'] = 1
-
     if not 'trip_time' in df.columns:
         # Some service types do not include the trip_time field so we need to compute it
         df['trip_time'] = df.apply(lambda f: get_triptime(
@@ -32,11 +39,8 @@ def main(source, destination, service_type):
     to_drop = ['pickup_datetime', 'dropoff_datetime']
     df.drop(columns=to_drop, inplace=True)
 
-    df.to_csv(destination, index=False)
-    print("Resultados guardados en", destination)
 
-
-def get_clean_df(source, service_type):
+def standardize_df_fields(df, service_type):
     PU_DATETIME_FIELDNAMES = {
         'green': 'lpep_pickup_datetime',
         'yellow': 'tpep_pickup_datetime',
@@ -66,27 +70,16 @@ def get_clean_df(source, service_type):
     TRIP_DISTANCE_FIELDNAME = TRIP_DISTANCE_FIELDNAMES[service_type]
     TOTAL_AMOUNT_FIELDNAME = TOTAL_AMOUNT_FIELDNAMES[service_type]
 
-    df = pd.read_csv(source)
-
     to_extract = [PU_DATETIME_FIELDNAME, DO_DATETIME_FIELDNAME, 'PULocationID', 'DOLocationID', TRIP_DISTANCE_FIELDNAME,
                   TOTAL_AMOUNT_FIELDNAME]
 
-    if service_type in ['green', 'yellow']:
-        to_extract.append('passenger_count')
-    elif service_type == 'fhvhv':
+    if service_type == 'fhvhv':
         to_extract.append('trip_time')
 
     df = df[to_extract]
 
     df.rename(mapper={PU_DATETIME_FIELDNAME: 'pickup_datetime', DO_DATETIME_FIELDNAME: 'dropoff_datetime',
               TRIP_DISTANCE_FIELDNAME: 'trip_distance', TOTAL_AMOUNT_FIELDNAME: 'total_amount'}, axis=1, inplace=True)
-
-    if 'passenger_count' in df.columns:
-        df['passenger_count'].fillna(1, inplace=True)
-
-    df.dropna(how='any', inplace=True)
-
-    return df
 
 
 def get_year(pu_iso_datetime):

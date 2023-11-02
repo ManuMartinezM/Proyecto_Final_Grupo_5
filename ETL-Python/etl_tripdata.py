@@ -3,17 +3,8 @@ from datetime import datetime
 import argparse
 
 
-def main(source, destination, service_type):
-    df = pd.read_csv(source)
-
-    clean_df(df, service_type)
-
-    df.to_csv(destination, index=False)
-    print("Resultados guardados en", destination)
-
-
 def clean_df(df, service_type):
-    df = standardize_df_fields(df, service_type)
+    standardize_df_fields(df, service_type)
 
     df.dropna(how='any', inplace=True)
 
@@ -76,7 +67,8 @@ def standardize_df_fields(df, service_type):
     if service_type == 'fhvhv':
         to_extract.append('trip_time')
 
-    df = df[to_extract]
+    to_drop = [column for column in df.columns if not column in to_extract]
+    df.drop(columns=to_drop, inplace=True)
 
     df.rename(mapper={PU_DATETIME_FIELDNAME: 'pickup_datetime', DO_DATETIME_FIELDNAME: 'dropoff_datetime',
               TRIP_DISTANCE_FIELDNAME: 'trip_distance', TOTAL_AMOUNT_FIELDNAME: 'total_amount'}, axis=1, inplace=True)
@@ -116,4 +108,9 @@ if __name__ == '__main__':
     parser.add_argument('--service-type', choices=['green', 'yellow', 'fhvhv'], required=True)
     args = parser.parse_args()
 
-    main(args.source, args.destination, args.service_type)
+    df = pd.read_csv(args.source)
+
+    clean_df(df, args.service_type)
+
+    df.to_csv(args.destination, index=False)
+    print("Resultados guardados en", args.destination)

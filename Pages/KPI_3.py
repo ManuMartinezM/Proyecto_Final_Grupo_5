@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
 
-st.set_page_config(page_title="KPI 1", page_icon=":taxi:", layout="wide")
-
 st.header("KPI: 5% increase in demand in airport taxi rides")
 st.markdown("***")
 
@@ -31,7 +29,7 @@ def fetch_data():
 kpi_query = """
     SELECT
         ((final.trip_distance - initial.trip_distance) / initial.trip_distance +
-        (final.passenger_count - initial.passenger_count) / initial.passenger_count +
+        (final.ssh -i "dataload-server.pem" ubuntu@ec2-18-216-27-127.us-east-2.compute.amazonaws.comssh -i "dataload-server.pem" ubuntu@ec2-18-216-27-127.us-east-2.compute.amazonaws.com - initial.passenger_count) / initial.passenger_count +
         (final.total_amount - initial.total_amount) / initial.total_amount +
         ((final.total_trips - initial.total_trips) / initial.total_trips)) * 100 / 4 AS demand_increase
     FROM

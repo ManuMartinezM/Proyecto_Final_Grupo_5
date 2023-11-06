@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
 
-st.set_page_config(page_title="KPI 1", page_icon=":taxi:", layout="wide")
-
 st.header("KPI: 5% increase in demand in For-Hire service")
 st.markdown("***")
 

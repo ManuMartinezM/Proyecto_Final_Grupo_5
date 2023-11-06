@@ -11,4 +11,6 @@ st.set_page_config(page_title="Final Project - HENRY (Group 5)", page_icon=":tax
 st.title(":bar_chart: HENRY: Final Project - Group 5")
 st.markdown("***")
 
-st.image("Images/Cover.jpg", caption="SmartANALYTICS")
+st.image("Cover.jpg", caption="SmartANALYTICS")
+
+

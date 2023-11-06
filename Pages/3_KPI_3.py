@@ -1,177 +1,409 @@
 import streamlit as st
+import pymysql
+import pandas as pd
+import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
-import matplotlib.pyplot as plt
-import pandas as pd
-from datetime import datetime
-import os
-import warnings
 
-st.set_page_config(page_title="KPI 3", page_icon=":taxi:", layout="wide")
+st.set_page_config(page_title="KPI 1", page_icon=":taxi:", layout="wide")
 
-st.header("KPI: 5% increase in demand for airport taxi rides")
+st.header("KPI: 5% increase in demand in airport taxi rides")
 st.markdown("***")
 
-green_2022 = pd.read_csv('green_2022-06.csv')
+# Replace these values with your database information
+host = 'database-1.cb8vqbpvimzr.us-east-2.rds.amazonaws.com'
+user = 'admin'
+password = 'adminadmin'
+database = 'NYC_TAXIS'
 
-# Convert date columns to datetime
-green_2022['lpep_pickup_datetime'] = pd.to_datetime(green_2022['lpep_pickup_datetime'])
-green_2022['lpep_dropoff_datetime'] = pd.to_datetime(green_2022['lpep_dropoff_datetime'])
+# Establish a connection to the database
+connection = pymysql.connect(host=host, user=user, password=password, database=database)
+cursor = connection.cursor()
 
-# Sidebar: Date Range Selection
-st.sidebar.header("Date Range Selection")
-start_date = st.sidebar.date_input("Start Date", datetime(2022, 6, 1))
-end_date = st.sidebar.date_input("End Date", datetime(2022, 6, 30))
+# Create a function to fetch data from the database
+def fetch_data():
+    query = "SELECT * FROM trips_data"
+    cursor.execute(query)
+    data = cursor.fetchall()
+    return data
 
-# Convert start_date and end_date to datetime
-start_date = pd.to_datetime(start_date)
-end_date = pd.to_datetime(end_date)
+# SQL query for KPI calculation including trips growth
+kpi_query = """
+    SELECT
+        ((final.trip_distance - initial.trip_distance) / initial.trip_distance +
+        (final.passenger_count - initial.passenger_count) / initial.passenger_count +
+        (final.total_amount - initial.total_amount) / initial.total_amount +
+        ((final.total_trips - initial.total_trips) / initial.total_trips)) * 100 / 4 AS demand_increase
+    FROM
+        (SELECT SUM(trip_distance) AS trip_distance, SUM(passenger_count) AS passenger_count, SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
+        FROM trips_data
+        WHERE year = 2022
+        AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138)) ) AS initial,
+        (SELECT SUM(trip_distance) AS trip_distance, SUM(passenger_count) AS passenger_count, SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
+        FROM trips_data
+        WHERE year = 2023
+        AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138)) ) AS final
+"""
 
-# Filter the dataset based on selected date range
-filtered_data = green_2022[(green_2022['lpep_pickup_datetime'] >= start_date) & (green_2022['lpep_pickup_datetime'] <= end_date)]
+# Execute the KPI query and fetch the result
+cursor.execute(kpi_query)
+demand_increase = cursor.fetchone()[0]
 
-# Calculate demand growth
-total_trips_growth = (filtered_data['trip_distance'].count() / green_2022['trip_distance'].count() - 1) * 100
-total_passengers_growth = (filtered_data['passenger_count'].sum() / green_2022['passenger_count'].sum() - 1) * 100
-total_revenue_growth = (filtered_data['total_amount'].sum() / green_2022['total_amount'].sum() - 1) * 100
-demand_growth = (total_trips_growth + total_passengers_growth + total_revenue_growth) / 3
+# Define the title and KPI objective
+title_suffix = "Airport Trips"
+kpi_objective = 5
 
-# Filter the data for trips to and from airports (location IDs 1, 132, and 138)
-airport_data = filtered_data[filtered_data['DOLocationID'].isin([1, 132, 138])]
+# Create a banner to display the KPI status
+kpi_style = f"""
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 10px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    background-color: {"#4CAF50" if demand_increase >= kpi_objective else "#FF5733"};
+"""
+st.markdown(f'<div style="{kpi_style}">Goal: {kpi_objective}%<div>{"KPI goal met!" if demand_increase >= kpi_objective else "KPI not met"}</div></div>', unsafe_allow_html=True)
 
-# Calculate the percentage growth in the number of passengers, number of trips, and revenue
-airport_data['date'] = airport_data['lpep_pickup_datetime'].dt.date
-passengers_growth = airport_data.groupby('date')['passenger_count'].count().pct_change() * 100
-trips_growth = airport_data.groupby('date')['trip_distance'].count().pct_change() * 100
-revenue_growth = airport_data.groupby('date')['total_amount'].sum().pct_change() * 100
+# Display the KPI banner
+if demand_increase >= 5:
+    st.success(f'Demand for {title_suffix} service increased by {demand_increase:.2f}%.')
+elif demand_increase >= 0:
+    st.error(f'Demand for {title_suffix} service increased by only {demand_increase:.2f}%.')
+else:
+    st.error(f'Demand for {title_suffix} service decreased by {demand_increase:.2f}%.')
 
-# Sidebar: Banner for Demand Growth
-demand_color = 'green' if demand_growth > 0 else 'red'
-st.sidebar.markdown(f'<h1 style="color:black;font-size:20px;">Demand Growth</h1>', unsafe_allow_html=True)
-st.sidebar.markdown(f'<h1 style="color:{demand_color};">{demand_growth:.2f}%</h1>', unsafe_allow_html=True)
+# Create selectboxes in the Streamlit sidebar for filtering by "type_service" and "year"
+filter_type_service = st.sidebar.selectbox("Filter by service type", ["Both", "For-Hire", "Not For-Hire"])
+filter_year = st.sidebar.selectbox("Filter by year", ["Both", "2022", "2023"])
 
-# Add the Multiselect widget in the sidebar
-selected_metrics = st.sidebar.multiselect("Select Metrics to Display", ["Passengers", "Trips", "Revenue"], default=["Passengers", "Trips", "Revenue"])
+# Define SQL query based on the selected filter options
+if filter_type_service == "For-Hire":
+    type_service_condition = "type_service = 1"
+elif filter_type_service == "Not For-Hire":
+    type_service_condition = "type_service = 0"
+else:  # "Both" (no filter)
+    type_service_condition = "1=1"
 
-# Create columns to display figures side by side
-col1, col2, col3 = st.columns(3)
+if filter_year == "2022":
+    year_condition = "year = 2022"
+elif filter_year == "2023":
+    year_condition = "year = 2023"
+else:  # "Both" (no filter)
+    year_condition = "1=1"
+
+# Combine conditions to create the final SQL query
+sql_query_1 = f"SELECT * FROM trips_data WHERE {type_service_condition} AND {year_condition}"
+
+# Use pandas to read the SQL query results into a DataFrame
+df_1 = pd.read_sql(sql_query_1, connection)
+
+# Define a custom color palette
+color_palette = ['#ADD8E6', '#90EE90', '#FFA07A', '#D3D3D3', '#FFFFE0', '#87CEEB', '#98FB98', '#FFD700', '#C0C0C0', '#FFA500']
 
 # Define a consistent figure size
-fig_width = 300
-fig_height = 300
+fig_width = 350
+fig_height = 450
 
-# Create a line chart for selected metrics
-fig1 = go.Figure()
-if "Passengers" in selected_metrics:
-    fig1.add_trace(go.Scatter(x=passengers_growth.index, y=passengers_growth, name='Passengers', line=dict(color='grey')))
-if "Trips" in selected_metrics:
-    fig1.add_trace(go.Scatter(x=trips_growth.index, y=trips_growth, name='Trips', line=dict(color='#ADD8E6')))
-if "Revenue" in selected_metrics:
-    fig1.add_trace(go.Scatter(x=revenue_growth.index, y=revenue_growth, name='Revenue', line=dict(color='#90EE90')))
-fig1.update_layout(
+# Create columns to display figures and titles side by side
+col1, col2, col3 = st.columns(3)
+
+# Add conditions to the SQL query based on selected filters
+if filter_type_service == "For-Hire":
+    type_service_condition = "AND type_service = 1"
+elif filter_type_service == "Not For-Hire":
+    type_service_condition = "AND type_service = 0"
+else:  # "Both" (no filter)
+    type_service_condition = ""
+
+# SQL query for calculating percentage growth of each variable with filter
+growth_query = f"""
+    SELECT
+        ((final.trip_distance - initial.trip_distance) / initial.trip_distance) * 100 AS distance_growth,
+        ((final.passenger_count - initial.passenger_count) / initial.passenger_count) * 100 AS passenger_growth,
+        ((final.total_amount - initial.total_amount) / initial.total_amount) * 100 AS revenue_growth,
+        ((final.total_trips - initial.total_trips) / initial.total_trips) * 100 AS trips_growth
+    FROM
+        (SELECT SUM(trip_distance) AS trip_distance, SUM(passenger_count) AS passenger_count, 
+                SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
+        FROM trips_data
+        WHERE year = 2022
+        AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138) {type_service_condition}) ) AS initial,
+        (SELECT SUM(trip_distance) AS trip_distance, SUM(passenger_count) AS passenger_count, 
+                SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
+        FROM trips_data
+        WHERE year = 2023
+        AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138) {type_service_condition}) ) AS final
+"""
+
+# Execute the percentage growth query
+cursor.execute(growth_query)
+growth_values = cursor.fetchone()
+
+# Extract growth values for distance, revenue, passengers, and trips
+distance_growth, passenger_growth, revenue_growth, trips_growth = growth_values
+
+# Create a DataFrame for the percentage growth values
+metrics = ["Trips", "Distance", "Revenue", "Passengers"]
+growth = [trips_growth, distance_growth, revenue_growth, passenger_growth]
+
+df_growth = pd.DataFrame({'Metrics': metrics, 'Growth': growth})
+
+# Create a bar chart using Plotly
+fig_1 = go.Figure()
+
+fig_1.add_trace(go.Bar(
+    x=df_growth['Metrics'],
+    y=df_growth['Growth'],
+    text=df_growth['Growth'].apply(lambda x: f'{x:.2f}%'),
+    marker_color=color_palette
+))
+
+# Update the title and axis labels
+fig_1.update_layout(
+    title='Percentage Growth of Trips, Distance, Revenue, and Passengers',
+    xaxis_title='Metrics',
+    yaxis_title='Percentage Growth',
     width=fig_width,
-    height=fig_height,
-    xaxis=dict(
-        tickvals=passengers_growth.index,
-        ticktext=[i if i.day % 5 == 0 else '' for i in passengers_growth.index]
-    ),
-    hovermode="x unified"
+    height=fig_height
 )
 
-# Line chart for variation in sum of passengers to/from airports by day
-airport_passengers = airport_data.groupby(airport_data['lpep_pickup_datetime'].dt.strftime('%d-%m-%Y'))['passenger_count'].sum().reset_index()
-fig2 = px.line(airport_passengers, x='lpep_pickup_datetime', y='passenger_count')
-fig2.update_traces(line=dict(color='green'))
+# Display the bar chart in your Streamlit app
+col1.plotly_chart(fig_1)
 
-# Calculate date intervals with 5-day increments
-min_date = pd.to_datetime(airport_passengers['lpep_pickup_datetime'].min(), format='%d-%m-%Y')
-date_range = [min_date]
-while date_range[-1] < pd.to_datetime(airport_passengers['lpep_pickup_datetime'].max(), format='%d-%m-%Y'):
-    date_range.append(date_range[-1] + pd.DateOffset(days=5))
+# Define the base SQL query to calculate the count of airport trips and non-airport trips
+base_donut_query = """
+    SELECT
+        CASE
+            WHEN PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138) THEN 'Airport Trips'
+            ELSE 'Other Trips'
+        END AS trip_type,
+        COUNT(*) AS trip_count
+    FROM trips_data
+"""
 
-date_range_str = [date.strftime('%d-%m-%Y') for date in date_range]
+# Add conditions to the SQL query based on selected filters
+if filter_type_service == "For-Hire":
+    type_service_condition = "AND type_service = 1"
+elif filter_type_service == "Not For-Hire":
+    type_service_condition = "AND type_service = 0"
+else:  # "Both" (no filter)
+    type_service_condition = ""
 
-fig2.update_xaxes(
-    title_text=None,
-)
-fig2.update_yaxes(title_text="Passenger Count")  # Set the y-axis title
-fig2.update_layout(
+if filter_year == "2022":
+    year_condition = "AND year = 2022"
+elif filter_year == "2023":
+    year_condition = "AND year = 2023"
+else:  # "Both" (no filter)
+    year_condition = ""
+
+# Combine conditions with the base query
+donut_query = base_donut_query + f" WHERE 1=1 {type_service_condition} {year_condition} GROUP BY trip_type"
+
+# Execute the donut query and fetch the result
+cursor.execute(donut_query)
+donut_data = cursor.fetchall()
+
+# Create a DataFrame from the SQL query result
+df_donut = pd.DataFrame(donut_data, columns=['trip_type', 'trip_count'])
+
+# Create a donut chart using Plotly Go with specified colors for slices
+fig_2 = go.Figure(data=[
+    go.Pie(
+        labels=df_donut['trip_type'],
+        values=df_donut['trip_count'],
+        marker=dict(colors=color_palette)
+    )
+])
+
+# Update the title and other properties of the donut chart
+fig_2.update_layout(
+    title='Airport Trips vs. Other Trips',
+    showlegend=False,  # Hide legend to create a donut chart
     width=fig_width,
-    height=fig_height,
-    xaxis=dict(
-        tickvals=airport_passengers.index,
-        ticktext=[date if idx % 5 == 0 else '' for idx, date in enumerate(airport_passengers['lpep_pickup_datetime'])]
-    ),
-    hovermode="x unified"
+    height=fig_height
 )
 
-# Donut chart for trips to and from airports
-total_trips = filtered_data['trip_distance'].count()
-airport_trips = airport_data['trip_distance'].count()
-other_trips = total_trips - airport_trips
-fig3 = go.Figure(data=[go.Pie(labels=['Airport Transfers', 'Other Trips'], values=[airport_trips, other_trips])])
-fig3.update_traces(marker=dict(colors=['blue', 'green']))
-fig3.update_traces(hole=0.4)
-fig3.update_layout(
+# Display the donut chart in your Streamlit app
+col2.plotly_chart(fig_2)
+
+# SQL query to join trips_data with taxi_zone and count trips to airport destinations
+top_pickup_query = """
+    SELECT tz.Zone, COUNT(*) AS trip_count
+    FROM trips_data AS td
+    JOIN taxi_zone AS tz
+    ON td.PULocationID = tz.LocationID
+    WHERE DOLocationID IN (1, 132, 138)  # Filter for airport destinations
+"""
+
+# Add conditions based on the filter_type_service value
+if filter_type_service == "For-Hire":
+    top_pickup_query += " AND td.type_service = 1"
+elif filter_type_service == "Not For-Hire":
+    top_pickup_query += " AND td.type_service = 0"
+
+if filter_year == "2022":
+    year_condition = " AND `year` = 2022"
+elif filter_year == "2023":
+    year_condition = " AND `year` = 2023"
+else:  # "Both" (no filter)
+    year_condition = ""
+
+# Add year filter condition
+top_pickup_query += year_condition
+
+top_pickup_query += """
+    GROUP BY tz.Zone
+    ORDER BY trip_count DESC
+    LIMIT 10  # Select the top 10 locations with the most trips
+"""
+
+# Execute the SQL query and fetch the result
+cursor.execute(top_pickup_query)
+top_pickup_data = cursor.fetchall()
+
+# Create a DataFrame from the SQL query result
+df_top_pickup = pd.DataFrame(top_pickup_data, columns=['Zone', 'trip_count'])
+
+# Sort the DataFrame by trip_count in descending order (for the bar chart)
+df_top_pickup = df_top_pickup.sort_values(by='trip_count', ascending=False)
+
+# Create a bar chart using Plotly Go (with the name fig_3)
+fig_3 = go.Figure(go.Bar(
+    x=df_top_pickup['Zone'],
+    y=df_top_pickup['trip_count'],
+    text=df_top_pickup['trip_count'],
+    textposition='outside',
+    marker_color=color_palette
+))
+
+# Update the title and other properties of the bar chart
+fig_3.update_layout(
+    title='Top 10 Pick-up Locations with Most Trips to Airport Destinations',
+    xaxis_title='Location (Zone)',
+    yaxis_title='Number of Trips',
     width=fig_width,
-    height=fig_height,
-    xaxis=dict(tickvals=passengers_growth.index),
-    hovermode="x unified"
+    height=fig_height
 )
 
-# Bar chart for top 10 pickup location IDs ending at airports
-# Filter data for trips with destinations at airports
-airport_trips = airport_data[airport_data['DOLocationID'].isin([1, 132, 138])]
+# Display the fig_3 bar chart in your Streamlit app
+col3.plotly_chart(fig_3)
 
-# Count the number of trips for each pickup location ID
-pickup_location_counts = airport_trips['PULocationID'].value_counts()
+# SQL query to calculate the total number of passengers for 2022 and 2023
+passenger_query = """
+    SELECT year, SUM(passenger_count) AS 'Total Passengers'
+    FROM trips_data
+    WHERE year IN (2022, 2023)  -- Filter for only 2022 and 2023
+    AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138))
+"""
 
-# Get the top 10 pickup location IDs in descending order
-top_10_pickup_ids = pickup_location_counts.nlargest(10).sort_index(ascending=False)
+# Add conditions based on the filter_type_service value
+if filter_type_service == "For-Hire":
+    passenger_query += " AND type_service = 1"
+elif filter_type_service == "Not For-Hire":
+    passenger_query += " AND type_service = 0"
 
-fig4 = px.bar(top_10_pickup_ids, x=top_10_pickup_ids.index, y=top_10_pickup_ids.values)
-fig4.update_traces(marker=dict(color='green'))
-fig4.update_layout(
+# Add conditions based on the filter_year value
+if filter_year == "2022":
+    passenger_query += " AND year = 2022"
+elif filter_year == "2023":
+    passenger_query += " AND year = 2023"
+
+# Group the data by year
+passenger_query += """
+    GROUP BY year
+"""
+
+# Execute the SQL query and fetch the result
+cursor.execute(passenger_query)
+passenger_data = cursor.fetchall()
+
+# Create a DataFrame from the SQL query result
+df_passengers = pd.DataFrame(passenger_data, columns=['Year', 'Total Passengers'])
+
+# Create a Plotly Go visualization (named fig_4)
+fig_4 = go.Figure(go.Bar(
+    x=df_passengers['Year'],
+    y=df_passengers['Total Passengers'],
+    text=df_passengers['Total Passengers'],
+    textposition='outside',
+    marker_color=color_palette  # Use the color palette here
+))
+
+# Update the title and other properties of the bar chart
+fig_4.update_layout(
+    title='Total Number of Passengers to and from Airports',
+    xaxis_title='Year',
+    yaxis_title='Total Passengers',
     width=fig_width,
-    height=fig_height,
-    hovermode="x unified"
+    height=fig_height
 )
-fig4.update_xaxes(categoryorder="total descending")
-fig4.update_xaxes(title_text="Pick-Up Location ID")
-fig4.update_yaxes(title_text="Trips Count")
 
-# Bar chart for airport trips by day of the week
-airport_data['day_of_week'] = airport_data['lpep_pickup_datetime'].dt.day_name()
-airport_day_of_week = airport_data['day_of_week'].value_counts()
-fig5 = px.bar(airport_day_of_week, x=airport_day_of_week.index, y=airport_day_of_week.values)
-fig5.update_traces(marker=dict(color='grey'))
-fig5.update_layout(
+# Set the x-axis as a category axis to show only "2022" and "2023"
+fig_4.update_xaxes(type='category')
+
+# Display the fig_4 visualization in your Streamlit app
+col1.plotly_chart(fig_4)
+
+# SQL query to count trips for each day of the week and order by the desired order
+day_of_week_query = """
+    SELECT DAYNAME(DATE(CONCAT(year, '-', month, '-', day))) AS day_of_week, COUNT(*) AS trip_count
+    FROM trips_data
+    WHERE year IN (2022, 2023)
+    AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138))
+"""
+
+# Add conditions based on the filter_type_service value
+if filter_type_service == "For-Hire":
+    day_of_week_query += " AND type_service = 1"
+elif filter_type_service == "Not For-Hire":
+    day_of_week_query += " AND type_service = 0"
+
+# Add conditions based on the filter_year value
+if filter_year == "2022":
+    day_of_week_query += " AND year = 2022"
+elif filter_year == "2023":
+    day_of_week_query += " AND year = 2023"
+
+# Group the data by day of the week
+day_of_week_query += """
+    GROUP BY day_of_week
+    ORDER BY FIELD(day_of_week, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+"""
+
+# Execute the SQL query and fetch the result
+cursor.execute(day_of_week_query)
+day_of_week_data = cursor.fetchall()
+
+# Create a DataFrame from the SQL query result
+df_day_of_week = pd.DataFrame(day_of_week_data, columns=['Day of the Week', 'Trip Count'])
+
+# Create a Plotly Go bar chart (named fig_5)
+fig_5 = go.Figure(go.Bar(
+    x=df_day_of_week['Day of the Week'],
+    y=df_day_of_week['Trip Count'],
+    text=df_day_of_week['Trip Count'],
+    textposition='outside',
+    marker_color=color_palette  # Use the color palette here
+))
+
+# Update the title and other properties of the bar chart
+fig_5.update_layout(
+    title='Number of Trips for Each Day of the Week',
+    xaxis_title='Day of the Week',
+    yaxis_title='Number of Trips',
     width=fig_width,
-    height=fig_height,
-    xaxis=dict(tickvals=passengers_growth.index),
-    hovermode="x unified"
+    height=fig_height
 )
-fig5.update_xaxes(categoryorder="array", categoryarray=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
-fig5.update_xaxes(title_text="Day of the Week")
-fig5.update_yaxes(title_text="Trips Count")
 
-# Display figures in columns
-with col1:
-    st.write("Percentage Growth (Trips, Passengers and Revenue)")
-    st.plotly_chart(fig1, use_container_width=True)
-    st.write("Number of passengers to and from airports")
-    st.plotly_chart(fig2, use_container_width=True)
-
-with col2:
-    st.write("Airport Transfers vs. Other Trips")
-    st.plotly_chart(fig3, use_container_width=True)
-
-with col3:
-    st.write("Top 10 Pick-Up points with airports as a destination")
-    st.plotly_chart(fig4, use_container_width=True)
-    st.write("Number of airport trips by day of the week")
-    st.plotly_chart(fig5, use_container_width=True)
+# Display the fig_5 bar chart in your Streamlit app
+col2.plotly_chart(fig_5)
 
 
 
 
+
+
+
+# Close the database connection
+connection.close()

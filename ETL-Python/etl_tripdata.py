@@ -9,20 +9,20 @@ def clean_df(df, service_type):
     df.dropna(how='any', inplace=True)
 
     df['year'] = df.apply(
-        lambda f: get_year(f['pickup_datetime']), axis=1)
+        lambda f: get_year(str(f['pickup_datetime'])), axis=1)
     df['month'] = df.apply(
-        lambda f: get_month(f['pickup_datetime']), axis=1)
+        lambda f: get_month(str(f['pickup_datetime'])), axis=1)
     df['day'] = df.apply(
-        lambda f: get_day(f['pickup_datetime']), axis=1)
+        lambda f: get_day(str(f['pickup_datetime'])), axis=1)
     df['pu_time'] = df.apply(
-        lambda f: get_PU_time(f['pickup_datetime']), axis=1)
+        lambda f: get_PU_time(str(f['pickup_datetime'])), axis=1)
     df['do_time'] = df.apply(
-        lambda f: get_DO_time(f['dropoff_datetime']), axis=1)
+        lambda f: get_DO_time(str(f['dropoff_datetime'])), axis=1)
 
     if not 'trip_time' in df.columns:
         # Some service types do not include the trip_time field so we need to compute it
         df['trip_time'] = df.apply(lambda f: get_triptime(
-            f['pickup_datetime'], f['dropoff_datetime']), axis=1)
+            str(f['pickup_datetime']), str(f['dropoff_datetime'])), axis=1)
 
     df['type_service'] = 1 if service_type == 'fhvhv' else 0  # 0 stands for 'not for hire vehicle'
 

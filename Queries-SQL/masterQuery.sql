@@ -2,14 +2,14 @@ drop database if exists NYC_TAXIS;
 create database if not exists NYC_TAXIS;
 USE NYC_TAXIS;
 
-# Tipe service
-drop table if exists type_service;
-CREATE TABLE if not exists type_service(
-	Type_ServiceID INT  PRIMARY KEY,
-    Service VARCHAR(20)
+# Service types
+drop table if exists service_types;
+CREATE TABLE if not exists service_types(
+	Service_type_id INT  PRIMARY KEY,
+    Service_name VARCHAR(20)
     );
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\type_services.csv'
-INTO TABLE type_service  
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\service_types.csv'
+INTO TABLE service_types  
 FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
 LINES TERMINATED BY '\n' IGNORE 1 LINES;
 

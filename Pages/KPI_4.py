@@ -5,15 +5,17 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
 
-st.header("KPI: 5% increase in demand in airport taxi rides")
-st.markdown("***")
+def display_KPI_4_page():
 
-# Replace these values with your database information
-host = 'database-1.cb8vqbpvimzr.us-east-2.rds.amazonaws.com'
-user = 'admin'
-password = 'adminadmin'
-database = 'NYC_TAXIS'
+    st.header("KPI: 5% increase in demand in airport taxi rides")
+    st.markdown("***")
 
-# Establish a connection to the database
-connection = pymysql.connect(host=host, user=user, password=password, database=database)
-cursor = connection.cursor()
+    # Replace these values with your database information
+    host = 'database-1.cb8vqbpvimzr.us-east-2.rds.amazonaws.com'
+    user = 'admin'
+    password = 'adminadmin'
+    database = 'NYC_TAXIS'
+
+    # Establish a connection to the database
+    connection = pymysql.connect(host=host, user=user, password=password, database=database)
+    cursor = connection.cursor()

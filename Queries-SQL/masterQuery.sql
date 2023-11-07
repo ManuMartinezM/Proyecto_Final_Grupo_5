@@ -13,6 +13,35 @@ INTO TABLE service_types
 FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
 LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
+# locations
+drop table if exists locations;
+CREATE TABLE if not exists locations(
+    Location_id INT PRIMARY KEY,
+    Location_name VARCHAR(150),
+    Borough VARCHAR(30)
+	);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_taxi_zone.csv'
+INTO TABLE locations
+FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
+LINES TERMINATED BY '\n' IGNORE 1 LINES;
+
+# fuel_vehicles
+drop table if exists fuel_vehicles;
+CREATE TABLE if not exists fuel_vehicles(
+    Vehicle_id INT PRIMARY KEY AUTO_INCREMENT,
+    Year INT,
+    Brand VARCHAR(50),
+    Model VARCHAR(50),
+    co2_emission_gpm FLOAT(6,2));
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_Vehicle Fuel Economy Data.csv'
+INTO TABLE fuel_vehicles
+FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
+LINES TERMINATED BY '\n' IGNORE 1 LINES;
+
+
+
 # Data report monthly 
 drop table if exists data_report_monthly;
 CREATE TABLE if not exists data_report_monthly(
@@ -30,30 +59,8 @@ INTO TABLE data_report_monthly
 FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
 LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
-# Taxi zone
-drop table if exists taxi_zone;
-CREATE TABLE if not exists taxi_zone(
-    OBJECTID INT PRIMARY KEY,
-	LocationID INT,
-    Borough VARCHAR(30),
-    Zone VARCHAR(150));
 
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_taxi_zone.csv'
-INTO TABLE taxi_zone  
-FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
-LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
-# Vehicle Fuel economy
-drop table if exists vehicle_fuel_economy;
-CREATE TABLE if not exists vehicle_fuel_economy(
-    ID INT PRIMARY KEY,
-    Model VARCHAR(50),
-    Co2 FLOAT(6,2));
-
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_Vehicle Fuel Economy Data.csv'
-INTO TABLE vehicle_fuel_economy  
-FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
-LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
 # Trips data
 drop table if exists trips_data;

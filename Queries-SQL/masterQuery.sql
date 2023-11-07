@@ -139,8 +139,8 @@ IGNORE 1 LINES;
 DROP TABLE IF EXISTS light_duty_vehicles;
 CREATE TABLE IF NOT EXISTS light_duty_vehicles (
     Model VARCHAR(255),
-    ModelYear INT,
-    Manufacturer VARCHAR(255),
+    Year INT,
+    Brand VARCHAR(255),
     Fuel VARCHAR(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 

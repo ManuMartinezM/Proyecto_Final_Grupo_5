@@ -1,4 +1,4 @@
-Model,Model Year,Manufacturer,Fuel
+Model,Year,Brand,Fuel
 NSX,2022,Acura,Hybrid Electric
 A3 ,2022,Audi,Hybrid Electric
 A3 quattro,2022,Audi,Hybrid Electric
@@ -10,7 +10,6 @@ A5 Coupe quattro,2022,Audi,Hybrid Electric
 A5 Sportback quattro,2022,Audi,Hybrid Electric
 A5 Sportback S line quattro,2022,Audi,Hybrid Electric
 A6 Allroad quattro,2022,Audi,Hybrid Electric
-A6 quattro,2022,Audi,Hybrid Electric
 A6 quattro,2022,Audi,Hybrid Electric
 A7 quattro,2022,Audi,Hybrid Electric
 A7 TFSI e quattro,2022,Audi,Plug-in Hybrid Electric
@@ -76,7 +75,6 @@ Colorado ZR2 4WD,2022,Chevrolet,Biodiesel (B20)
 Silverado 2WD,2022,Chevrolet,Ethanol (E85)
 Silverado 2WD,2022,Chevrolet,Biodiesel (B20)
 Silverado 4WD,2022,Chevrolet,Biodiesel (B20)
-Silverado 4WD,2022,Chevrolet,Biodiesel (B20)
 Silverado 4WD,2022,Chevrolet,Ethanol (E85)
 Silverado 4WD - Mud Terrain Tires,2022,Chevrolet,Ethanol (E85)
 Silverado 4WD - Mud Terrain Tires,2022,Chevrolet,Biodiesel (B20)
@@ -93,7 +91,6 @@ Escape FWD PHEV,2022,Ford,Plug-in Hybrid Electric
 Explorer AWD FFV,2022,Ford,Ethanol (E85)
 Explorer HEV AWD,2022,Ford,Hybrid Electric
 Explorer HEV RWD,2022,Ford,Hybrid Electric
-Explorer Platinum HEV ,2022,Ford,Hybrid Electric
 Explorer Platinum HEV ,2022,Ford,Hybrid Electric
 F-150 2WD FFV,2022,Ford,Ethanol (E85)
 F-150 2WD FFV - Without Start/Stop,2022,Ford,Ethanol (E85)
@@ -230,7 +227,6 @@ E 450 (Coupe),2022,Mercedes-Benz,Hybrid Electric
 EQS450+,2022,Mercedes-Benz,Electric
 EQS 580 4MATIC,2022,Mercedes-Benz,Electric
 GLE 450 4MATIC,2022,Mercedes-Benz,Hybrid Electric
-GLE 450 4MATIC,2022,Mercedes-Benz,Hybrid Electric
 GLE 580 4MATIC,2022,Mercedes-Benz,Hybrid Electric
 GLS 450 4MATIC,2022,Mercedes-Benz,Hybrid Electric
 GLS 580 4MATIC,2022,Mercedes-Benz,Hybrid Electric
@@ -262,8 +258,6 @@ Taycan Turbo Cross Turismo,2022,Porsche,Electric
 Taycan Turbo S,2022,Porsche,Electric
 Taycan Turbo S Cross Turismo,2022,Porsche,Electric
 1500 4X2,2022,Ram,Hybrid Electric
-1500 4X2,2022,Ram,Hybrid Electric
-1500 4X4,2022,Ram,Hybrid Electric
 1500 4X4,2022,Ram,Hybrid Electric
 1500 HFE 4X2,2022,Ram,Hybrid Electric
 R1S,2022,Rivian ,Electric
@@ -329,11 +323,9 @@ A5 Sportback quattro,2021,Audi,Hybrid Electric
 A5 Sportback S line quattro,2021,Audi,Hybrid Electric
 A6 Allroad,2021,Audi,Hybrid Electric
 A6 quattro,2021,Audi,Hybrid Electric
-A6 quattro,2021,Audi,Hybrid Electric
 A7 quattro,2021,Audi,Hybrid Electric
 A7 quattro,2021,Audi,Plug-in Hybrid Electric
 A8L,2021,Audi,Plug-in Hybrid Electric
-A8L,2021,Audi,Hybrid Electric
 A8L,2021,Audi,Hybrid Electric
 e-tron,2021,Audi,Electric
 e-tron Sportback,2021,Audi,Electric
@@ -395,15 +387,12 @@ Explorer HEV AWD,2021,Ford,Hybrid Electric
 Explorer HEV RWD,2021,Ford,Hybrid Electric
 F-150 2WD,2021,Ford,Biodiesel (B20)
 F-150 2WD FFV,2021,Ford,Ethanol (E85)
-F-150 2WD FFV,2021,Ford,Ethanol (E85)
 F-150 4WD,2021,Ford,Biodiesel (B20)
-F-150 4WD FFV,2021,Ford,Ethanol (E85)
 F-150 4WD FFV,2021,Ford,Ethanol (E85)
 F150 Pickup 2WD HEV,2021,Ford,Hybrid Electric
 F150 Pickup 4WD HEV,2021,Ford,Hybrid Electric
 Mustang Mach-E AWD,2021,Ford,Electric
 Mustang Mach-E AWD Extended,2021,Ford,Electric
-Mustang Mach-E GT AWD,2021,Ford,Electric
 Mustang Mach-E GT AWD,2021,Ford,Electric
 Mustang Mach-E RWD,2021,Ford,Electric
 Mustang Mach-E RWD California Route 1,2021,Ford,Electric
@@ -505,7 +494,6 @@ AMG GT 53 4MATIC+,2021,Mercedes-Benz,Hybrid Electric
 CLS 450,2021,Mercedes-Benz,Hybrid Electric
 CLS 450 4MATIC,2021,Mercedes-Benz,Hybrid Electric
 E 450 4MATIC,2021,Mercedes-Benz,Hybrid Electric
-E 450 4MATIC,2021,Mercedes-Benz,Hybrid Electric
 E 450 4MATIC All-Terrain (wagon),2021,Mercedes-Benz,Hybrid Electric
 E 450 4MATIC (Convertible),2021,Mercedes-Benz,Hybrid Electric
 E 450 4MATIC (Coupe),2021,Mercedes-Benz,Hybrid Electric
@@ -547,8 +535,6 @@ Taycan Perf Battery Plus,2021,Porsche,Electric
 Taycan Turbo,2021,Porsche,Electric
 Taycan Turbo S,2021,Porsche,Electric
 1500 2WD,2021,Ram,Hybrid Electric
-1500 2WD,2021,Ram,Hybrid Electric
-1500 4WD,2021,Ram,Hybrid Electric
 1500 4WD,2021,Ram,Hybrid Electric
 1500 HFE 4X2,2021,Ram,Hybrid Electric
 Crosstrek Hybrid AWD,2021,Subaru,Plug-in Hybrid Electric
@@ -598,9 +584,7 @@ NSX,2020,Acura,Hybrid Electric
 RLX,2020,Acura,Hybrid Electric
 A6 Allroad,2020,Audi,Hybrid Electric
 A6 quattro,2020,Audi,Hybrid Electric
-A6 quattro,2020,Audi,Hybrid Electric
 A7 quattro,2020,Audi,Hybrid Electric
-A8L,2020,Audi,Hybrid Electric
 A8L,2020,Audi,Hybrid Electric
 A8L,2020,Audi,Plug-in Hybrid Electric
 e-tron Sportback,2020,Audi,Electric
@@ -653,9 +637,7 @@ F-150 2WD/4WD,2020,Ford,CNG - Compressed Natural Gas
 F-150 2WD/4WD,2020,Ford,Propane
 F-150 2WD/4WD,2020,Ford,Propane - Bi-fuel
 F-150 2WD FFV,2020,Ford,Ethanol (E85)
-F-150 2WD FFV,2020,Ford,Ethanol (E85)
 F-150 4WD,2020,Ford,Biodiesel (B20)
-F-150 4WD FFV,2020,Ford,Ethanol (E85)
 F-150 4WD FFV,2020,Ford,Ethanol (E85)
 F-150 4WD XL/XLT,2020,Ford,Biodiesel (B20)
 Fusion Energi Plug in Hybrid FWD,2020,Ford,Plug-in Hybrid Electric
@@ -672,13 +654,11 @@ Super Duty F-250 2WD/4WD,2020,Ford,Plug-in Hybrid Electric
 Super Duty F-250 2WD/4WD,2020,Ford,Propane - Bi-fuel
 Transit Cargo Van,2020,Ford,Hybrid Electric
 Transit Cargo Van,2020,Ford,Electric
-Transit Cargo Van,2020,Ford,Electric
 Transit Connect Van FFV,2020,Ford,Ethanol (E85)
 Transit Connect Van/Wagon,2020,Ford,CNG - Compressed Natural Gas
 Transit Connect Van/Wagon,2020,Ford,CNG - Bi-fuel
 Transit Connect Wagon LWB FFV,2020,Ford,Ethanol (E85)
 Transit Passenger Van,2020,Ford,Hybrid Electric
-Transit Passenger Van,2020,Ford,Electric
 Transit Passenger Van,2020,Ford,Electric
 Transit T150 Cargo Van 2WD FFV,2020,Ford,Ethanol (E85)
 Transit T150 Cargo Van 4WD FFV,2020,Ford,Ethanol (E85)
@@ -698,7 +678,6 @@ Sierra 4WD AT4,2020,GMC,Biodiesel (B20)
 Yukon K1500 4WD,2020,GMC,Ethanol (E85)
 Yukon K1500 XL 4WD,2020,GMC,Ethanol (E85)
 Yukon XL C1500 2WD,2020,GMC,Ethanol (E85)
-Yukon XL C1500 2WD,2020,GMC,Ethanol (E85)
 Accord,2020,Honda,Hybrid Electric
 Clarity,2020,Honda,Hydrogen Fuel Cell
 Clarity PHEV,2020,Honda,Plug-in Hybrid Electric
@@ -716,7 +695,6 @@ Sonata Hybrid,2020,Hyundai,Hybrid Electric
 Sonata Hybrid Blue,2020,Hyundai,Hybrid Electric
 I-PACE,2020,Jaguar,Electric
 Wrangler 4x4,2020,Jeep,Hybrid Electric
-Wrangler Unlimited 4x4,2020,Jeep,Hybrid Electric
 Wrangler Unlimited 4x4,2020,Jeep,Hybrid Electric
 "Revero GT (21"" wheels)",2020,Karma,Plug-in Hybrid Electric
 Niro,2020,Kia,Hybrid Electric
@@ -780,8 +758,6 @@ Taycan 4S Perf Battery Plus,2020,Porsche,Electric
 Taycan Turbo,2020,Porsche,Electric
 Taycan Turbo S,2020,Porsche,Electric
 1500 2WD,2020,Ram,Hybrid Electric
-1500 2WD,2020,Ram,Hybrid Electric
-1500 4WD,2020,Ram,Hybrid Electric
 1500 4WD,2020,Ram,Hybrid Electric
 1500 HFE 2WD,2020,Ram,Hybrid Electric
 Crosstrek Hybrid AWD,2020,Subaru,Plug-in Hybrid Electric
@@ -825,9 +801,7 @@ MDX AWD,2019,Acura,Hybrid Electric
 NSX Hybrid,2019,Acura,Hybrid Electric
 RLX Hybrid,2019,Acura,Hybrid Electric
 A6 quattro,2019,Audi,Hybrid Electric
-A6 quattro,2019,Audi,Hybrid Electric
 A7 quattro,2019,Audi,Hybrid Electric
-A8L,2019,Audi,Hybrid Electric
 A8L,2019,Audi,Hybrid Electric
 e-tron,2019,Audi,Electric
 Q8,2019,Audi,Hybrid Electric
@@ -878,9 +852,7 @@ F-150,2019,Ford,Propane
 F-150 2WD,2019,Ford,Biodiesel (B20)
 F-150 2WD/4WD,2019,Ford,CNG - Compressed Natural Gas
 F-150 2WD FFV,2019,Ford,Ethanol (E85)
-F-150 2WD FFV,2019,Ford,Ethanol (E85)
 F-150 4WD,2019,Ford,Biodiesel (B20)
-F-150 4WD FFV,2019,Ford,Ethanol (E85)
 F-150 4WD FFV,2019,Ford,Ethanol (E85)
 F-150 4WD XL/XLT,2019,Ford,Biodiesel (B20)
 Fusion Energi Plug in Hybrid FWD,2019,Ford,Plug-in Hybrid Electric
@@ -902,7 +874,6 @@ Transit Connect Wagon FFV,2019,Ford,Ethanol (E85)
 Transit T150 Wagon FFV,2019,Ford,Ethanol (E85)
 Transit Van/Wagon,2019,Ford,Electric
 Transit Van/Wagon,2019,Ford,Propane
-Transit Van/Wagon,2019,Ford,Electric
 Transit Van/Wagon,2019,Ford,Biodiesel (B20)
 Transit Van/Wagon,2019,Ford,Hybrid Electric
 Canyon 2WD,2019,GMC,Biodiesel (B20)
@@ -996,8 +967,6 @@ Panamera Turbo S e-Hybrid,2019,Porsche,Plug-in Hybrid Electric
 Panamera Turbo S e-Hybrid Executive,2019,Porsche,Plug-in Hybrid Electric
 Panamera Turbo S e-Hybrid ST,2019,Porsche,Plug-in Hybrid Electric
 1500 2WD,2019,Ram,Hybrid Electric
-1500 2WD,2019,Ram,Hybrid Electric
-1500 4WD,2019,Ram,Hybrid Electric
 1500 4WD,2019,Ram,Hybrid Electric
 1500 Classic 2WD,2019,Ram,Ethanol (E85)
 1500 Classic 4WD,2019,Ram,Ethanol (E85)
@@ -1063,8 +1032,6 @@ Colorado 2WD,2018,Chevrolet,Biodiesel (B20)
 Colorado 4WD,2018,Chevrolet,Biodiesel (B20)
 Colorado ZR2 4WD,2018,Chevrolet,Biodiesel (B20)
 Cruze,2018,Chevrolet,Biodiesel (B20)
-Cruze,2018,Chevrolet,Biodiesel (B20)
-Cruze Hatchback,2018,Chevrolet,Biodiesel (B20)
 Cruze Hatchback,2018,Chevrolet,Biodiesel (B20)
 Equinox AWD,2018,Chevrolet,Biodiesel (B20)
 Equinox FWD,2018,Chevrolet,Biodiesel (B20)
@@ -1080,8 +1047,6 @@ Silverado 2500 HD 2WD/4WD,2018,Chevrolet,Biodiesel (B20)
 Silverado 2500 HD 2WD/4WD,2018,Chevrolet,CNG - Compressed Natural Gas
 Silverado 2500 HD 2WD/4WD,2018,Chevrolet,Propane
 Silverado C15 2WD,2018,Chevrolet,Ethanol (E85)
-Silverado C15 2WD,2018,Chevrolet,Ethanol (E85)
-Silverado K15 4WD,2018,Chevrolet,Ethanol (E85)
 Silverado K15 4WD,2018,Chevrolet,Ethanol (E85)
 Suburban C1500 2WD,2018,Chevrolet,Ethanol (E85)
 Suburban K1500 4WD,2018,Chevrolet,Ethanol (E85)
@@ -1104,9 +1069,7 @@ F-150,2018,Ford,CNG - Compressed Natural Gas
 F-150,2018,Ford,Plug-in Hybrid Electric
 F-150 2WD,2018,Ford,Biodiesel (B20)
 F-150 2WD FFV,2018,Ford,Ethanol (E85)
-F-150 2WD FFV,2018,Ford,Ethanol (E85)
 F-150 4WD,2018,Ford,Biodiesel (B20)
-F-150 4WD FFV,2018,Ford,Ethanol (E85)
 F-150 4WD FFV,2018,Ford,Ethanol (E85)
 F-150 4WD XL/XLT,2018,Ford,Biodiesel (B20)
 Focus Electric FWD,2018,Ford,Electric
@@ -1142,8 +1105,6 @@ Sierra 2500 HD 2WD/4WD,2018,GMC,Ethanol (E85)
 Sierra 2500 HD 2WD/4WD,2018,GMC,Biodiesel (B20)
 Sierra 2500 HD 2WD/4WD,2018,GMC,Propane
 Sierra C15 2WD,2018,GMC,Ethanol (E85)
-Sierra C15 2WD,2018,GMC,Ethanol (E85)
-Sierra K15 2WD,2018,GMC,Ethanol (E85)
 Sierra K15 2WD,2018,GMC,Ethanol (E85)
 Terrain AWD,2018,GMC,Biodiesel (B20)
 Terrain FWD,2018,GMC,Biodiesel (B20)
@@ -1255,7 +1216,6 @@ Q5 AWD,2017,Audi,Ethanol (E85)
 330e,2017,BMW,Plug-in Hybrid Electric
 740e xDrive,2017,BMW,Plug-in Hybrid Electric
 i3 BEV,2017,BMW,Electric
-i3 BEV,2017,BMW,Electric
 I3 REX,2017,BMW,Plug-in Hybrid Electric
 I8,2017,BMW,Plug-in Hybrid Electric
 X5 xDrive40e,2017,BMW,Plug-in Hybrid Electric
@@ -1277,15 +1237,12 @@ Silverado 2500 HD 2WD/4WD,2017,Chevrolet,Propane
 Silverado 2500 HD 2WD/4WD,2017,Chevrolet,Biodiesel (B20)
 Silverado 2500 HD 2WD/4WD,2017,Chevrolet,CNG - Compressed Natural Gas
 Silverado C15 2WD,2017,Chevrolet,Ethanol (E85)
-Silverado C15 2WD,2017,Chevrolet,Ethanol (E85)
-Silverado K15 4WD,2017,Chevrolet,Ethanol (E85)
 Silverado K15 4WD,2017,Chevrolet,Ethanol (E85)
 Suburban C1500 2WD,2017,Chevrolet,Ethanol (E85)
 Suburban K1500 4WD,2017,Chevrolet,Ethanol (E85)
 Tahoe C1500 2WD,2017,Chevrolet,Ethanol (E85)
 Tahoe K1500 4WD,2017,Chevrolet,Ethanol (E85)
 Volt,2017,Chevrolet,Plug-in Hybrid Electric
-200,2017,Chrysler,Ethanol (E85)
 200,2017,Chrysler,Ethanol (E85)
 200 AWD,2017,Chrysler,Ethanol (E85)
 Pacifica PHEV,2017,Chrysler,Plug-in Hybrid Electric
@@ -1327,8 +1284,6 @@ Sierra 2500 HD 2WD/4WD,2017,GMC,CNG - Compressed Natural Gas
 Sierra 2500 HD 2WD/4WD,2017,GMC,Propane
 Sierra 2500 HD 2WD/4WD,2017,GMC,Biodiesel (B20)
 Sierra C15 2WD,2017,GMC,Ethanol (E85)
-Sierra C15 2WD,2017,GMC,Ethanol (E85)
-Sierra K15 4WD,2017,GMC,Ethanol (E85)
 Sierra K15 4WD,2017,GMC,Ethanol (E85)
 Terrain FWD,2017,GMC,Ethanol (E85)
 Yukon C1500 2WD,2017,GMC,Ethanol (E85)
@@ -1386,7 +1341,6 @@ Rogue SV FWD Hybrid,2017,Nissan,Hybrid Electric
 Titan HD 2WD/4WD,2017,Nissan,Biodiesel (B20)
 918 Spyder,2017,Porsche,Plug-in Hybrid Electric
 Cayenne S e-Hybrid,2017,Porsche,Plug-in Hybrid Electric
-Cayenne S e-Hybrid,2017,Porsche,Plug-in Hybrid Electric
 Panamera 4 e-Hybrid,2017,Porsche,Plug-in Hybrid Electric
 1500 2WD,2017,Ram,Ethanol (E85)
 1500 4WD,2017,Ram,Ethanol (E85)
@@ -1427,7 +1381,6 @@ Tundra 2WD FFV,2017,Toyota,Ethanol (E85)
 Tundra 4WD FFV,2017,Toyota,Ethanol (E85)
 e-Golf,2017,Volkswagen,Electric
 XC90 T8 Plug-in Hybrid,2017,Volvo,Plug-in Hybrid Electric
-XC90 T8 Plug-in Hybrid,2017,Volvo,Plug-in Hybrid Electric
 RLX Hybrid,2016,Acura,Hybrid Electric
 A3 Sportback e-tron,2016,Audi,Plug-in Hybrid Electric
 A4 Quattro,2016,Audi,Ethanol (E85)
@@ -1445,9 +1398,7 @@ LaCrosse FWD/AWD,2016,Buick,Ethanol (E85)
 Verano,2016,Buick,Ethanol (E85)
 ELR,2016,Cadillac,Plug-in Hybrid Electric
 Caprice Police Patrol Vehicle,2016,Chevrolet,Ethanol (E85)
-Caprice Police Patrol Vehicle,2016,Chevrolet,Ethanol (E85)
 Colorado 2WD/4WD,2016,Chevrolet,Biodiesel (B20)
-Equinox FWD/AWD,2016,Chevrolet,Ethanol (E85)
 Equinox FWD/AWD,2016,Chevrolet,Ethanol (E85)
 Express 2500,2016,Chevrolet,CNG - Compressed Natural Gas
 Express 2500,2016,Chevrolet,Biodiesel (B20)
@@ -1460,7 +1411,6 @@ Impala,2016,Chevrolet,Ethanol (E85)
 Impala,2016,Chevrolet,CNG - Compressed Natural Gas
 Impala Limited Police,2016,Chevrolet,Ethanol (E85)
 Malibu,2016,Chevrolet,Hybrid Electric
-Silverado 1500 2WD/4WD,2016,Chevrolet,Ethanol (E85)
 Silverado 1500 2WD/4WD,2016,Chevrolet,Ethanol (E85)
 Silverado 1500 Special Services 2WD/4WD,2016,Chevrolet,Ethanol (E85)
 Silverado 2500 HD,2016,Chevrolet,CNG - Compressed Natural Gas
@@ -1486,14 +1436,12 @@ C-MAX Energi,2016,Ford,Plug-in Hybrid Electric
 C-MAX Hybrid,2016,Ford,Hybrid Electric
 Explorer 2WD/AWD,2016,Ford,Ethanol (E85)
 F-150,2016,Ford,Ethanol (E85)
-F-150,2016,Ford,Ethanol (E85)
 F-150,2016,Ford,Propane
 F-150,2016,Ford,CNG - Compressed Natural Gas
 Focus,2016,Ford,Ethanol (E85)
 Focus,2016,Ford,Electric
 Fusion Energi,2016,Ford,Plug-in Hybrid Electric
 Fusion Hybrid,2016,Ford,Hybrid Electric
-Police Interceptor,2016,Ford,Ethanol (E85)
 Police Interceptor,2016,Ford,Ethanol (E85)
 Police Interceptor Utility,2016,Ford,Ethanol (E85)
 Super Duty F-250,2016,Ford,Propane
@@ -1513,7 +1461,6 @@ Savana 2500,2016,GMC,Biodiesel (B20)
 Savana 2500,2016,GMC,CNG - Compressed Natural Gas
 Savana 2500,2016,GMC,Ethanol (E85)
 Savana Cargo Paratransit,2016,GMC,Ethanol (E85)
-Sierra 1500 2WD/4WD,2016,GMC,Ethanol (E85)
 Sierra 1500 2WD/4WD,2016,GMC,Ethanol (E85)
 Sierra 2500 2WD/4WD,2016,GMC,Ethanol (E85)
 Sierra 2500 HD,2016,GMC,CNG - Compressed Natural Gas
@@ -1611,7 +1558,6 @@ Caprice Police Patrol Vehicle,2015,Chevrolet,Ethanol (E85)
 Captiva,2015,Chevrolet,Ethanol (E85)
 Cruze,2015,Chevrolet,Biodiesel (B20)
 Equinox,2015,Chevrolet,Ethanol (E85)
-Equinox,2015,Chevrolet,Ethanol (E85)
 Express 2500/3500,2015,Chevrolet,Ethanol (E85)
 Express 2500/3500,2015,Chevrolet,Biodiesel (B20)
 Express 2500/3500,2015,Chevrolet,CNG - Compressed Natural Gas
@@ -1620,11 +1566,8 @@ Express 3500/4500,2015,Chevrolet,Biodiesel (B20)
 Express 3500/4500,2015,Chevrolet,Propane
 Impala,2015,Chevrolet,CNG - Bi-fuel
 Impala,2015,Chevrolet,Ethanol (E85)
-Impala,2015,Chevrolet,CNG - Bi-fuel
 Impala Limited Police,2015,Chevrolet,Ethanol (E85)
 Silverado 1500 2WD/4WD,2015,Chevrolet,Ethanol (E85)
-Silverado 1500 2WD/4WD,2015,Chevrolet,Ethanol (E85)
-Silverado 1500 Cab-chassis 2WD/4WD,2015,Chevrolet,Ethanol (E85)
 Silverado 1500 Cab-chassis 2WD/4WD,2015,Chevrolet,Ethanol (E85)
 Silverado 1500 Special Services 2WD/4WD,2015,Chevrolet,Ethanol (E85)
 Silverado 2500 2WD/4WD,2015,Chevrolet,Ethanol (E85)
@@ -1652,18 +1595,14 @@ Journey FWD,2015,Dodge,Ethanol (E85)
 C-MAX Energi,2015,Ford,Plug-in Hybrid Electric
 C-MAX Hybrid,2015,Ford,Hybrid Electric
 E-350/450,2015,Ford,Propane
-E-350/450,2015,Ford,Propane
-E-350/450,2015,Ford,CNG - Compressed Natural Gas
 E-350/450,2015,Ford,CNG - Compressed Natural Gas
 Expedition 2WD/4WD,2015,Ford,Ethanol (E85)
 Explorer FWD/AWD,2015,Ford,Ethanol (E85)
-F-150 2WD/4WD,2015,Ford,Ethanol (E85)
 F-150 2WD/4WD,2015,Ford,Ethanol (E85)
 Focus,2015,Ford,Electric
 Focus,2015,Ford,Ethanol (E85)
 Fusion Energi,2015,Ford,Plug-in Hybrid Electric
 Fusion Hybrid,2015,Ford,Hybrid Electric
-Police Interceptor,2015,Ford,Ethanol (E85)
 Police Interceptor,2015,Ford,Ethanol (E85)
 Police Interceptor Utility,2015,Ford,Ethanol (E85)
 Super Duty F-250/350,2015,Ford,Ethanol (E85)
@@ -1671,8 +1610,6 @@ Super Duty F-250/350,2015,Ford,Propane
 Super Duty F-250/350,2015,Ford,CNG - Compressed Natural Gas
 Super Duty F-250/350/450,2015,Ford,Biodiesel (B20)
 Super Duty F-350,2015,Ford,Ethanol (E85)
-Super Duty F-350/450/550,2015,Ford,CNG - Compressed Natural Gas
-Super Duty F-350/450/550,2015,Ford,Propane
 Super Duty F-350/450/550,2015,Ford,CNG - Compressed Natural Gas
 Super Duty F-350/450/550,2015,Ford,Propane
 Super Duty F-450/550/650,2015,Ford,Biodiesel (B20)
@@ -1694,15 +1631,12 @@ Savana 3500/4500,2015,GMC,Biodiesel (B20)
 Savana 3500/4500,2015,GMC,Propane
 Savana 3500/4500,2015,GMC,CNG - Compressed Natural Gas
 Sierra 1500 2WD/4WD,2015,GMC,Ethanol (E85)
-Sierra 1500 2WD/4WD,2015,GMC,Ethanol (E85)
-Sierra 1500 Cab-chassis 2WD/4WD,2015,GMC,Ethanol (E85)
 Sierra 1500 Cab-chassis 2WD/4WD,2015,GMC,Ethanol (E85)
 Sierra 2500 2WD/4WD,2015,GMC,Ethanol (E85)
 Sierra 2500/3500 HD (2WD/4WD),2015,GMC,CNG - Bi-fuel
 Sierra 2500/3500 HD (2WD/4WD),2015,GMC,Biodiesel (B20)
 Sierra 3500 2WD/4WD,2015,GMC,Ethanol (E85)
 Sierra 3500 HD (2WD/4WD),2015,GMC,Biodiesel (B20)
-Terrain,2015,GMC,Ethanol (E85)
 Terrain,2015,GMC,Ethanol (E85)
 Yukon 2WD/4WD,2015,GMC,Ethanol (E85)
 Yukon XL 2WD/4WD,2015,GMC,Ethanol (E85)
@@ -1719,13 +1653,10 @@ Q70 Hybrid,2015,Infiniti,Hybrid Electric
 QX60 Hybrid,2015,Infiniti,Hybrid Electric
 XF FFV,2015,Jaguar,Ethanol (E85)
 XJ FFV,2015,Jaguar,Ethanol (E85)
-XJ FFV,2015,Jaguar,Ethanol (E85)
-XJL FFV,2015,Jaguar,Ethanol (E85)
 XJL FFV,2015,Jaguar,Ethanol (E85)
 Cherokee FWD/4WD,2015,Jeep,Ethanol (E85)
 Grand Cherokee 2WD/4WD,2015,Jeep,Biodiesel (B20)
 Grand Cherokee 2WD/4WD,2015,Jeep,Ethanol (E85)
-Optima,2015,Kia,Hybrid Electric
 Optima,2015,Kia,Hybrid Electric
 Soul,2015,Kia,Electric
 Range Rover,2015,Land Rover,Ethanol (E85)
@@ -1802,11 +1733,8 @@ ELR,2014,Cadillac,Plug-in Hybrid Electric
 "Escalade, 2WD/4WD",2014,Cadillac,Ethanol (E85)
 "Escalade ESV, 2WD/4WD",2014,Cadillac,Ethanol (E85)
 Caprice Police Patrol Vehicle,2014,Chevrolet,Ethanol (E85)
-Caprice Police Patrol Vehicle,2014,Chevrolet,Ethanol (E85)
-"Captiva, FWD/AWD",2014,Chevrolet,Ethanol (E85)
 "Captiva, FWD/AWD",2014,Chevrolet,Ethanol (E85)
 Cruze,2014,Chevrolet,Biodiesel (B20)
-"Equinox, FWD/AWD",2014,Chevrolet,Ethanol (E85)
 "Equinox, FWD/AWD",2014,Chevrolet,Ethanol (E85)
 "Express 1500, 2WD/AWD",2014,Chevrolet,Ethanol (E85)
 "Express 2500, 2WD",2014,Chevrolet,Ethanol (E85)
@@ -1816,7 +1744,6 @@ Cruze,2014,Chevrolet,Biodiesel (B20)
 "Express, Cutaway 4500",2014,Chevrolet,Propane
 Impala,2014,Chevrolet,Ethanol (E85)
 Impala Limited Police,2014,Chevrolet,Ethanol (E85)
-"Silverado 1500, 2WD/4WD",2014,Chevrolet,Ethanol (E85)
 "Silverado 1500, 2WD/4WD",2014,Chevrolet,Ethanol (E85)
 "Silverado 2500/3500 HD, 2WD/4WD",2014,Chevrolet,Biodiesel (B20)
 Silverado 2500 HD,2014,Chevrolet,CNG - Bi-fuel
@@ -1839,19 +1766,13 @@ Grand Caravan,2014,Dodge,Ethanol (E85)
 C-MAX Energi,2014,Ford,Plug-in Hybrid Electric
 C-MAX Hybrid,2014,Ford,Hybrid Electric
 E-150/250/350,2014,Ford,Ethanol (E85)
-E-150/250/350,2014,Ford,Ethanol (E85)
 E150/250/350,2014,Ford,Propane - Bi-fuel
-E150/250/350,2014,Ford,Propane - Bi-fuel
-E150/250/350,2014,Ford,CNG - Bi-fuel
 E150/250/350,2014,Ford,CNG - Bi-fuel
 E-350/450 Cutaway,2014,Ford,CNG - Bi-fuel
 E-350/450 Cutaway,2014,Ford,Propane - Bi-fuel
 E-350/450 Cutaway,2014,Ford,Ethanol (E85)
-E-350/450 Cutaway,2014,Ford,CNG - Bi-fuel
-E-350/450 Cutaway,2014,Ford,Propane - Bi-fuel
 "Expedition, 2WD/AWD",2014,Ford,Ethanol (E85)
 "Explorer, 2WD/AWD",2014,Ford,Ethanol (E85)
-F-150,2014,Ford,Ethanol (E85)
 F-150,2014,Ford,Ethanol (E85)
 F-150,2014,Ford,CNG - Bi-fuel
 F-150,2014,Ford,Propane - Bi-fuel
@@ -1860,15 +1781,12 @@ Focus,2014,Ford,Ethanol (E85)
 Fusion Energi,2014,Ford,Plug-in Hybrid Electric
 Fusion Hybrid,2014,Ford,Hybrid Electric
 Police Interceptor,2014,Ford,Ethanol (E85)
-Police Interceptor,2014,Ford,Ethanol (E85)
 Police Interceptor Utility,2014,Ford,Ethanol (E85)
 "Super Duty, F-250/350",2014,Ford,Ethanol (E85)
 "Super Duty, F-250/350/450",2014,Ford,Propane - Bi-fuel
 "Super Duty, F-250/350/450",2014,Ford,Biodiesel (B20)
 "Super Duty, F-250/350/450",2014,Ford,CNG - Bi-fuel
 "Super Duty, F-350",2014,Ford,Ethanol (E85)
-"Super Duty, F-350/450/550",2014,Ford,Propane - Bi-fuel
-"Super Duty, F-350/450/550",2014,Ford,CNG - Bi-fuel
 "Super Duty, F-350/450/550",2014,Ford,Propane - Bi-fuel
 "Super Duty, F-350/450/550",2014,Ford,CNG - Bi-fuel
 "Super Duty, F-650/750",2014,Ford,CNG - Bi-fuel
@@ -1892,7 +1810,6 @@ Transit Connect,2014,Ford,Propane - Bi-fuel
 Savana 3500/4500 Cutaway,2014,GMC,CNG - Compressed Natural Gas
 "Savana, Cutaway 4500",2014,GMC,Propane
 "Sierra 1500, 2WD/4WD",2014,GMC,Ethanol (E85)
-"Sierra 1500, 2WD/4WD",2014,GMC,Ethanol (E85)
 "Sierra 2500/3500 HD, 2WD/4WD",2014,GMC,Biodiesel (B20)
 Sierra 2500 HD,2014,GMC,CNG - Bi-fuel
 "Sierra Denali 2500/3500 HD, 2WD/4WD",2014,GMC,Biodiesel (B20)
@@ -1901,7 +1818,6 @@ Sierra 2500 HD,2014,GMC,CNG - Bi-fuel
 "Yukon, 2WD",2014,GMC,Ethanol (E85)
 "Yukon, 2WD/4WD",2014,GMC,Ethanol (E85)
 "Yukon Denali, 4WD",2014,GMC,Ethanol (E85)
-"Yukon XL, 2WD/4WD",2014,GMC,Ethanol (E85)
 "Yukon XL, 2WD/4WD",2014,GMC,Ethanol (E85)
 Accord,2014,Honda,Hybrid Electric
 Accord Plug-in Hybrid,2014,Honda,Plug-in Hybrid Electric
@@ -1917,17 +1833,12 @@ Sonata,2014,Hyundai,Hybrid Electric
 Q70 Hybrid,2014,Infiniti,Hybrid Electric
 QX60 Hybrid,2014,Infiniti,Hybrid Electric
 XF FFV,2014,Jaguar,Ethanol (E85)
-XF FFV,2014,Jaguar,Ethanol (E85)
 XJ FFV,2014,Jaguar,Ethanol (E85)
-XJ FFV,2014,Jaguar,Ethanol (E85)
-XJL FFV,2014,Jaguar,Ethanol (E85)
 XJL FFV,2014,Jaguar,Ethanol (E85)
 "Grand Cherokee, 2WD/FWD",2014,Jeep,Ethanol (E85)
 Optima,2014,Kia,Hybrid Electric
 Soul,2014,Kia,Electric
 Range Rover,2014,Land Rover,Ethanol (E85)
-Range Rover,2014,Land Rover,Ethanol (E85)
-Range Rover Sport,2014,Land Rover,Ethanol (E85)
 Range Rover Sport,2014,Land Rover,Ethanol (E85)
 CT 200h,2014,Lexus,Hybrid Electric
 ES 300h,2014,Lexus,Hybrid Electric
@@ -1990,7 +1901,6 @@ ActiveHybrid 7,2013,BMW,Hybrid Electric
 LaCrosse,2013,Buick,Ethanol (E85)
 LaCrosse FWD / AWD,2013,Buick,Ethanol (E85)
 Regal,2013,Buick,Ethanol (E85)
-Regal,2013,Buick,Ethanol (E85)
 Verano,2013,Buick,Ethanol (E85)
 ATS RWD / AWD,2013,Cadillac,Ethanol (E85)
 Escalade 2WD / AWD,2013,Cadillac,Hybrid Electric
@@ -2002,11 +1912,8 @@ Avalanche 1500 2WD/ AWD,2013,Chevrolet,Ethanol (E85)
 Cab Chassis 3500,2013,Chevrolet,Biodiesel (B20)
 Caprice Police Patrol & Detective Vehicle,2013,Chevrolet,Ethanol (E85)
 Captiva FWD / AWD,2013,Chevrolet,Ethanol (E85)
-Captiva FWD / AWD,2013,Chevrolet,Ethanol (E85)
-Equinox FWD / AWD,2013,Chevrolet,Ethanol (E85)
 Equinox FWD / AWD,2013,Chevrolet,Ethanol (E85)
 Express 1500 2WD / AWD,2013,Chevrolet,Ethanol (E85)
-Express 2500 / 3500,2013,Chevrolet,Ethanol (E85)
 Express 2500 / 3500,2013,Chevrolet,Ethanol (E85)
 Express 2500 / 3500,2013,Chevrolet,CNG - Compressed Natural Gas
 Express 2500 / 3500,2013,Chevrolet,Biodiesel (B20)
@@ -2014,8 +1921,6 @@ Express Cutaway,2013,Chevrolet,Propane
 Express Prisoner Transport Van,2013,Chevrolet,Ethanol (E85)
 Impala,2013,Chevrolet,Ethanol (E85)
 Impala Police & Undercover Vehicle,2013,Chevrolet,Ethanol (E85)
-Silverado C / K 1500,2013,Chevrolet,Ethanol (E85)
-Silverado C / K 1500,2013,Chevrolet,Ethanol (E85)
 Silverado C / K 1500,2013,Chevrolet,Ethanol (E85)
 Silverado C / K 1500,2013,Chevrolet,Hybrid Electric
 Silverado HD 2500 2WD / 4WD,2013,Chevrolet,CNG - Bi-fuel
@@ -2040,15 +1945,11 @@ Journey,2013,Dodge,Ethanol (E85)
 C-MAX,2013,Ford,Hybrid Electric
 C-MAX ENERGI,2013,Ford,Plug-in Hybrid Electric
 E150/E250,2013,Ford,Ethanol (E85)
-E150/E250,2013,Ford,Ethanol (E85)
-E150/E250/E350,2013,Ford,CNG - Bi-fuel
-E150/E250/E350,2013,Ford,Propane - Bi-fuel
 E150/E250/E350,2013,Ford,CNG - Bi-fuel
 E150/E250/E350,2013,Ford,Propane - Bi-fuel
 E350,2013,Ford,Ethanol (E85)
 Expedition 2WD / AWD,2013,Ford,Ethanol (E85)
 Explorer 2WD / AWD,2013,Ford,Ethanol (E85)
-F150 2WD / 4WD,2013,Ford,Ethanol (E85)
 F150 2WD / 4WD,2013,Ford,Ethanol (E85)
 F250/F350 Super Duty,2013,Ford,Propane - Bi-fuel
 F250/F350 Super Duty,2013,Ford,CNG - Bi-fuel
@@ -2069,21 +1970,16 @@ Savana 1500 2WD / AWD,2013,GMC,Ethanol (E85)
 Savana 2500 / 3500,2013,GMC,CNG - Compressed Natural Gas
 Savana 2500 / 3500,2013,GMC,Biodiesel (B20)
 Savana 2500 / 3500,2013,GMC,Ethanol (E85)
-Savana 2500 / 3500,2013,GMC,Ethanol (E85)
 Sierra C / K 1500,2013,GMC,Ethanol (E85)
-Sierra C / K 1500,2013,GMC,Ethanol (E85)
-Sierra C / K 1500,2013,GMC,Hybrid Electric
 Sierra C / K 1500,2013,GMC,Hybrid Electric
 Sierra HD 2500 2WD / 4WD,2013,GMC,CNG - Bi-fuel
 Sierra HD 2500 / 3500,2013,GMC,Biodiesel (B20)
-Terrain FWD / AWD,2013,GMC,Ethanol (E85)
 Terrain FWD / AWD,2013,GMC,Ethanol (E85)
 Yukon 1500 2WD/ AWD,2013,GMC,Ethanol (E85)
 Yukon 2WD / AWD,2013,GMC,Hybrid Electric
 Yukon 2WD/ AWD,2013,GMC,Ethanol (E85)
 Yukon Denali 2WD / AWD,2013,GMC,Hybrid Electric
 Yukon Denali 2WD/ AWD,2013,GMC,Ethanol (E85)
-Yukon XL 2WD/ AWD,2013,GMC,Ethanol (E85)
 Yukon XL 2WD/ AWD,2013,GMC,Ethanol (E85)
 Civic,2013,Honda,Hybrid Electric
 Civic,2013,Honda,CNG - Compressed Natural Gas
@@ -2150,15 +2046,12 @@ Escalade Hybrid,2012,Cadillac,Hybrid Electric
 Avalanche 1500 2WD/4WD,2012,Chevrolet,Ethanol (E85)
 Caprice Police Patrol Vehicle FFV,2012,Chevrolet,Ethanol (E85)
 Equinox FWD/AWD,2012,Chevrolet,Ethanol (E85)
-Equinox FWD/AWD,2012,Chevrolet,Ethanol (E85)
 Express 1500,2012,Chevrolet,Ethanol (E85)
 Express 2500/3500,2012,Chevrolet,Ethanol (E85)
 Express 2500/3500,2012,Chevrolet,Biodiesel (B20)
 Express 2500/3500,2012,Chevrolet,CNG - Compressed Natural Gas
 Impala,2012,Chevrolet,Ethanol (E85)
 Malibu,2012,Chevrolet,Ethanol (E85)
-Silverado 1500 FFV,2012,Chevrolet,Ethanol (E85)
-Silverado 1500 FFV,2012,Chevrolet,Ethanol (E85)
 Silverado 1500 FFV,2012,Chevrolet,Ethanol (E85)
 Silverado 1500 Hybrid,2012,Chevrolet,Hybrid Electric
 Silverado 2500/3500,2012,Chevrolet,Biodiesel (B20)
@@ -2179,7 +2072,6 @@ Durango 2WD/4WD,2012,Dodge,Ethanol (E85)
 Grand Caravan,2012,Dodge,Ethanol (E85)
 Journey,2012,Dodge,Ethanol (E85)
 Karma,2012,Fisker Automotive,Plug-in Hybrid Electric
-E-150 / E-250,2012,Ford,Ethanol (E85)
 E-150 / E-250,2012,Ford,Ethanol (E85)
 E-350,2012,Ford,Ethanol (E85)
 Escape FFV,2012,Ford,Ethanol (E85)
@@ -2205,8 +2097,6 @@ Savana 2500/3500,2012,GMC,Biodiesel (B20)
 Savana 2500/3500,2012,GMC,CNG - Compressed Natural Gas
 Savana 2500/3500,2012,GMC,Ethanol (E85)
 Savana G1500,2012,GMC,Ethanol (E85)
-Sierra 1500 FFV,2012,GMC,Ethanol (E85)
-Sierra 1500 FFV,2012,GMC,Ethanol (E85)
 Sierra 1500 FFV,2012,GMC,Ethanol (E85)
 Sierra 1500 Hybrid,2012,GMC,Hybrid Electric
 Sierra 2500/3500,2012,GMC,Biodiesel (B20)
@@ -2244,7 +2134,6 @@ Cayenne S Hybrid,2012,Porsche,Hybrid Electric
 Panamera S Hybrid,2012,Porsche,Hybrid Electric
 1500,2012,Ram,Ethanol (E85)
 2500/3500 HD,2012,Ram,Biodiesel (B20)
-2500/3500 HD,2012,Ram,Biodiesel (B20)
 Model S,2012,Tesla,Electric
 Camry Hybrid,2012,Toyota,Hybrid Electric
 Highlander Hybrid,2012,Toyota,Hybrid Electric
@@ -2279,7 +2168,6 @@ Equinox FWD,2011,Chevrolet,Ethanol (E85)
 Express 1500 Cargo Van,2011,Chevrolet,Ethanol (E85)
 Express 2500 Passenger Van,2011,Chevrolet,Ethanol (E85)
 HHR FWD Automatic,2011,Chevrolet,Ethanol (E85)
-HHR FWD Manual,2011,Chevrolet,Ethanol (E85)
 HHR FWD Manual,2011,Chevrolet,Ethanol (E85)
 Impala LS,2011,Chevrolet,Ethanol (E85)
 Malibu LS,2011,Chevrolet,Ethanol (E85)
@@ -2317,8 +2205,6 @@ Ford  Azure Transit Connect,2011,Ford,Electric
 Fusion AWD FFV,2011,Ford,Ethanol (E85)
 Fusion FWD FFV,2011,Ford,Ethanol (E85)
 Fusion Hybrid,2011,Ford,Hybrid Electric
-Fusion Hybrid,2011,Ford,Hybrid Electric
-Transit Connect CNG,2011,Ford,CNG - Compressed Natural Gas
 Transit Connect CNG,2011,Ford,CNG - Compressed Natural Gas
 Transit Connect Propane,2011,Ford,Propane
 Savana 1500,2011,GMC,Ethanol (E85)
@@ -2330,7 +2216,6 @@ Terrain FWD,2011,GMC,Ethanol (E85)
 Yukon 1500,2011,GMC,Ethanol (E85)
 Yukon 1500 Hybrid,2011,GMC,Hybrid Electric
 Civic GX,2011,Honda,CNG - Compressed Natural Gas
-Civic Hybrid,2011,Honda,Hybrid Electric
 Civic Hybrid,2011,Honda,Hybrid Electric
 CR-Z,2011,Honda,Hybrid Electric
 FCX Clarity,2011,Honda,Hydrogen Fuel Cell
@@ -2592,7 +2477,6 @@ Impala FFV,2006,Chevrolet,Ethanol (E85)
 Monte Carlo FFV,2006,Chevrolet,Ethanol (E85)
 Silverado,2006,Chevrolet,Hybrid Electric
 Silverado,2006,Chevrolet,CNG - Compressed Natural Gas
-Silverado,2006,Chevrolet,CNG - Compressed Natural Gas
 Silverado FFV,2006,Chevrolet,Ethanol (E85)
 Suburban FFV,2006,Chevrolet,Ethanol (E85)
 Tahoe FFV,2006,Chevrolet,Ethanol (E85)
@@ -2608,7 +2492,6 @@ F-150 FFV,2006,Ford,Ethanol (E85)
 Grand Marquis FFV,2006,Ford,Ethanol (E85)
 Taurus FFV,2006,Ford,Ethanol (E85)
 Taurus Wagon FFV,2006,Ford,Ethanol (E85)
-Sierra,2006,GMC,CNG - Compressed Natural Gas
 Sierra,2006,GMC,CNG - Compressed Natural Gas
 Sierra,2006,GMC,Hybrid Electric
 Sierra FFV,2006,GMC,Ethanol (E85)
@@ -2626,7 +2509,6 @@ Prius Hybrid,2006,Toyota,Hybrid Electric
 Avalanche FFV,2005,Chevrolet,Ethanol (E85)
 Silverado,2005,Chevrolet,CNG - Compressed Natural Gas
 Silverado,2005,Chevrolet,Hybrid Electric
-Silverado,2005,Chevrolet,CNG - Compressed Natural Gas
 Silverado FFV,2005,Chevrolet,Ethanol (E85)
 Suburban FFV,2005,Chevrolet,Ethanol (E85)
 Tahoe FFV,2005,Chevrolet,Ethanol (E85)
@@ -2640,7 +2522,6 @@ Explorer FFV,2005,Ford,Ethanol (E85)
 Explorer Sport Trac FFV,2005,Ford,Ethanol (E85)
 Taurus FFV,2005,Ford,Ethanol (E85)
 Taurus Wagon FFV,2005,Ford,Ethanol (E85)
-Sierra,2005,GMC,CNG - Compressed Natural Gas
 Sierra,2005,GMC,CNG - Compressed Natural Gas
 Sierra,2005,GMC,Hybrid Electric
 Sierra FFV,2005,GMC,Ethanol (E85)
@@ -2662,8 +2543,6 @@ Highlander Hybrid,2005,Toyota,Hybrid Electric
 Prius Hybrid,2005,Toyota,Hybrid Electric
 Chevrolet Cavalier,2004,Chevrolet,CNG - Compressed Natural Gas
 Express,2004,Chevrolet,CNG - Compressed Natural Gas
-Express,2004,Chevrolet,CNG - Compressed Natural Gas
-Silverado,2004,Chevrolet,CNG - Compressed Natural Gas
 Silverado,2004,Chevrolet,CNG - Compressed Natural Gas
 Silverado FFV,2004,Chevrolet,Ethanol (E85)
 Suburban FFV,2004,Chevrolet,Ethanol (E85)
@@ -2679,12 +2558,9 @@ Explorer FFV,2004,Ford,Ethanol (E85)
 Explorer Sport Trac FFV,2004,Ford,Ethanol (E85)
 F-150,2004,Ford,Propane
 F-150,2004,Ford,CNG - Compressed Natural Gas
-F-150,2004,Ford,CNG - Compressed Natural Gas
 Taurus FFV,2004,Ford,Ethanol (E85)
 Taurus Wagon FFV,2004,Ford,Ethanol (E85)
 Savana,2004,GMC,CNG - Compressed Natural Gas
-Savana,2004,GMC,CNG - Compressed Natural Gas
-Sierra,2004,GMC,CNG - Compressed Natural Gas
 Sierra,2004,GMC,CNG - Compressed Natural Gas
 Sierra FFV,2004,GMC,Ethanol (E85)
 Yukon FFV,2004,GMC,Ethanol (E85)
@@ -2723,12 +2599,10 @@ E 350 Van,2003,Ford,CNG - Compressed Natural Gas
 E 350 Wagon,2003,Ford,CNG - Compressed Natural Gas
 F-150,2003,Ford,CNG - Compressed Natural Gas
 F-150,2003,Ford,Propane
-F-150,2003,Ford,CNG - Compressed Natural Gas
 Ranger FFV,2003,Ford,Ethanol (E85)
 Sport Track FFV,2003,Ford,Ethanol (E85)
 Taurus Sedan FFV,2003,Ford,Ethanol (E85)
 TH!NK City,2003,Ford,Electric
-Savana,2003,GMC,CNG - Compressed Natural Gas
 Savana,2003,GMC,CNG - Compressed Natural Gas
 Sierra,2003,GMC,CNG - Compressed Natural Gas
 Sierra FFV,2003,GMC,Ethanol (E85)
@@ -2750,7 +2624,6 @@ RAV4-EV,2003,Toyota,Electric
 Chevrolet Cavalier,2002,Chevrolet,CNG - Compressed Natural Gas
 Express,2002,Chevrolet,CNG - Compressed Natural Gas
 S-10 FFV,2002,Chevrolet,Ethanol (E85)
-Silverado,2002,Chevrolet,CNG - Compressed Natural Gas
 Silverado,2002,Chevrolet,CNG - Compressed Natural Gas
 Suburban FFV,2002,Chevrolet,Ethanol (E85)
 Tahoe FFV,2002,Chevrolet,Ethanol (E85)
@@ -2788,8 +2661,6 @@ B3000 FFV,2002,Mazda,Ethanol (E85)
 Altra EV,2002,Nissan,Electric
 Hypermini,2002,Nissan,Electric
 Express,2002,QUANTUM-PROCON,Propane
-Express,2002,QUANTUM-PROCON,Propane
-Savana,2002,QUANTUM-PROCON,Propane
 Savana,2002,QUANTUM-PROCON,Propane
 Citivan,2002,Solectria,Electric
 Camry,2002,Toyota,CNG - Compressed Natural Gas
@@ -2813,7 +2684,6 @@ Crown Victoria CNG,2001,Ford,CNG - Compressed Natural Gas
 E-450 Cutaway,2001,Ford,CNG - Compressed Natural Gas
 Econoline,2001,Ford,CNG - Compressed Natural Gas
 Explorer Sport FFV,2001,Ford,Ethanol (E85)
-F-150,2001,Ford,CNG - Compressed Natural Gas
 F-150,2001,Ford,CNG - Compressed Natural Gas
 F-150,2001,Ford,Propane
 F-Series Super Duty,2001,Ford,Propane
@@ -2856,7 +2726,6 @@ Crown Victoria,2000,Ford,CNG - Compressed Natural Gas
 Econoline E-250,2000,Ford,CNG - Compressed Natural Gas
 Econoline E-350,2000,Ford,CNG - Compressed Natural Gas
 F-150,2000,Ford,CNG - Compressed Natural Gas
-F-150,2000,Ford,CNG - Compressed Natural Gas
 F-150,2000,Ford,Propane
 F-Series Super Duty,2000,Ford,Propane
 Ranger EV-NiMH PbA,2000,Ford,Electric
@@ -2892,9 +2761,7 @@ Contour,1999,Ford,CNG - Compressed Natural Gas
 Crown Victoria,1999,Ford,CNG - Compressed Natural Gas
 Econoline,1999,Ford,CNG - Compressed Natural Gas
 Econoline,1999,Ford,Propane
-Econoline,1999,Ford,CNG - Compressed Natural Gas
 Econoline E-350,1999,Ford,Propane
-Econoline E-350,1999,Ford,CNG - Compressed Natural Gas
 Econoline E-350,1999,Ford,CNG - Compressed Natural Gas
 F-150,1999,Ford,Propane
 F-250,1999,Ford,CNG - Compressed Natural Gas
@@ -2905,7 +2772,6 @@ Ranger EV-NiMH,1999,Ford,Electric
 Ranger FFV,1999,Ford,Ethanol (E85)
 Super Club Wagon,1999,Ford,CNG - Compressed Natural Gas
 Super Club Wagon,1999,Ford,Propane
-Super Club Wagon,1999,Ford,CNG - Compressed Natural Gas
 Taurus FFV,1999,Ford,Ethanol (E85)
 EV1-Lead Acid,1999,General Motors EV,Electric
 EV1-NiMH,1999,General Motors EV,Electric
@@ -2930,10 +2796,8 @@ Contour (QVM),1998,Ford,CNG - Compressed Natural Gas
 Crown Victoria,1998,Ford,CNG - Compressed Natural Gas
 Econoline Clubwagon,1998,Ford,Propane
 Econoline Clubwagon,1998,Ford,CNG - Compressed Natural Gas
-Econoline Clubwagon,1998,Ford,CNG - Compressed Natural Gas
 Econoline E-250,1998,Ford,CNG - Compressed Natural Gas
 Econoline E-250,1998,Ford,Propane
-Econoline E-250,1998,Ford,CNG - Compressed Natural Gas
 F-150,1998,Ford,Propane
 F-150,1998,Ford,CNG - Compressed Natural Gas
 F-250,1998,Ford,CNG - Compressed Natural Gas
@@ -2951,10 +2815,8 @@ Contour (QVM),1997,Ford,CNG - Compressed Natural Gas
 Crown Victoria,1997,Ford,CNG - Compressed Natural Gas
 Econoline Clubwagon,1997,Ford,Propane
 Econoline Clubwagon,1997,Ford,CNG - Compressed Natural Gas
-Econoline Clubwagon,1997,Ford,CNG - Compressed Natural Gas
 Econoline E-250,1997,Ford,CNG - Compressed Natural Gas
 Econoline E-250,1997,Ford,Propane
-Econoline E-250,1997,Ford,CNG - Compressed Natural Gas
 F-150,1997,Ford,CNG - Compressed Natural Gas
 F-150,1997,Ford,Propane
 F-250,1997,Ford,CNG - Compressed Natural Gas

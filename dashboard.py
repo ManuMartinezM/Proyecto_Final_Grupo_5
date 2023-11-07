@@ -13,8 +13,11 @@ st.image("Cover.jpg", caption="SmartANALYTICS")
 # List of KPI page names
 kpi_names = ["KPI 1", "KPI 2", "KPI 3", "KPI 4", "KPI 5"]
 
-# Create a sidebar widget for selecting a KPI page
-selected_kpi = st.selectbox("Select a KPI Page", kpi_names)
+# Add a title to the sidebar
+st.sidebar.title("Select a KPI Page")
+
+# Create a sidebar select box for selecting a KPI page
+selected_kpi = st.sidebar.selectbox("Choose a KPI Page", kpi_names)
 
 # Define a function to display the selected KPI page
 def display_selected_kpi(selected_kpi):

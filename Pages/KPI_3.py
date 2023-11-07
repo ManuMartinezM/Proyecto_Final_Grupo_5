@@ -29,15 +29,14 @@ def fetch_data():
 kpi_query = """
     SELECT
         ((final.trip_distance - initial.trip_distance) / initial.trip_distance +
-        (final.ssh -i "dataload-server.pem" ubuntu@ec2-18-216-27-127.us-east-2.compute.amazonaws.comssh -i "dataload-server.pem" ubuntu@ec2-18-216-27-127.us-east-2.compute.amazonaws.com - initial.passenger_count) / initial.passenger_count +
         (final.total_amount - initial.total_amount) / initial.total_amount +
         ((final.total_trips - initial.total_trips) / initial.total_trips)) * 100 / 4 AS demand_increase
     FROM
-        (SELECT SUM(trip_distance) AS trip_distance, SUM(passenger_count) AS passenger_count, SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
+        (SELECT SUM(trip_distance) AS trip_distance, SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
         FROM trips_data
         WHERE year = 2022
         AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138)) ) AS initial,
-        (SELECT SUM(trip_distance) AS trip_distance, SUM(passenger_count) AS passenger_count, SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
+        (SELECT SUM(trip_distance) AS trip_distance, SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
         FROM trips_data
         WHERE year = 2023
         AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138)) ) AS final
@@ -118,16 +117,15 @@ else:  # "Both" (no filter)
 growth_query = f"""
     SELECT
         ((final.trip_distance - initial.trip_distance) / initial.trip_distance) * 100 AS distance_growth,
-        ((final.passenger_count - initial.passenger_count) / initial.passenger_count) * 100 AS passenger_growth,
         ((final.total_amount - initial.total_amount) / initial.total_amount) * 100 AS revenue_growth,
         ((final.total_trips - initial.total_trips) / initial.total_trips) * 100 AS trips_growth
     FROM
-        (SELECT SUM(trip_distance) AS trip_distance, SUM(passenger_count) AS passenger_count, 
+        (SELECT SUM(trip_distance) AS trip_distance, 
                 SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
         FROM trips_data
         WHERE year = 2022
         AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138) {type_service_condition}) ) AS initial,
-        (SELECT SUM(trip_distance) AS trip_distance, SUM(passenger_count) AS passenger_count, 
+        (SELECT SUM(trip_distance) AS trip_distance, 
                 SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
         FROM trips_data
         WHERE year = 2023
@@ -138,12 +136,12 @@ growth_query = f"""
 cursor.execute(growth_query)
 growth_values = cursor.fetchone()
 
-# Extract growth values for distance, revenue, passengers, and trips
-distance_growth, passenger_growth, revenue_growth, trips_growth = growth_values
+# Extract growth values for distance, revenue, and trips
+distance_growth,revenue_growth, trips_growth = growth_values
 
 # Create a DataFrame for the percentage growth values
-metrics = ["Trips", "Distance", "Revenue", "Passengers"]
-growth = [trips_growth, distance_growth, revenue_growth, passenger_growth]
+metrics = ["Trips", "Distance", "Revenue"]
+growth = [trips_growth, distance_growth, revenue_growth]
 
 df_growth = pd.DataFrame({'Metrics': metrics, 'Growth': growth})
 
@@ -159,7 +157,7 @@ fig_1.add_trace(go.Bar(
 
 # Update the title and axis labels
 fig_1.update_layout(
-    title='Percentage Growth of Trips, Distance, Revenue, and Passengers',
+    title='Percentage Growth of Trips, Distance and Revenue',
     xaxis_title='Metrics',
     yaxis_title='Percentage Growth',
     width=fig_width,
@@ -284,64 +282,7 @@ fig_3.update_layout(
     height=fig_height
 )
 
-# Display the fig_3 bar chart in your Streamlit app
 col3.plotly_chart(fig_3)
-
-# SQL query to calculate the total number of passengers for 2022 and 2023
-passenger_query = """
-    SELECT year, SUM(passenger_count) AS 'Total Passengers'
-    FROM trips_data
-    WHERE year IN (2022, 2023)  -- Filter for only 2022 and 2023
-    AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138))
-"""
-
-# Add conditions based on the filter_type_service value
-if filter_type_service == "For-Hire":
-    passenger_query += " AND type_service = 1"
-elif filter_type_service == "Not For-Hire":
-    passenger_query += " AND type_service = 0"
-
-# Add conditions based on the filter_year value
-if filter_year == "2022":
-    passenger_query += " AND year = 2022"
-elif filter_year == "2023":
-    passenger_query += " AND year = 2023"
-
-# Group the data by year
-passenger_query += """
-    GROUP BY year
-"""
-
-# Execute the SQL query and fetch the result
-cursor.execute(passenger_query)
-passenger_data = cursor.fetchall()
-
-# Create a DataFrame from the SQL query result
-df_passengers = pd.DataFrame(passenger_data, columns=['Year', 'Total Passengers'])
-
-# Create a Plotly Go visualization (named fig_4)
-fig_4 = go.Figure(go.Bar(
-    x=df_passengers['Year'],
-    y=df_passengers['Total Passengers'],
-    text=df_passengers['Total Passengers'],
-    textposition='outside',
-    marker_color=color_palette  # Use the color palette here
-))
-
-# Update the title and other properties of the bar chart
-fig_4.update_layout(
-    title='Total Number of Passengers to and from Airports',
-    xaxis_title='Year',
-    yaxis_title='Total Passengers',
-    width=fig_width,
-    height=fig_height
-)
-
-# Set the x-axis as a category axis to show only "2022" and "2023"
-fig_4.update_xaxes(type='category')
-
-# Display the fig_4 visualization in your Streamlit app
-col1.plotly_chart(fig_4)
 
 # SQL query to count trips for each day of the week and order by the desired order
 day_of_week_query = """
@@ -377,7 +318,7 @@ day_of_week_data = cursor.fetchall()
 df_day_of_week = pd.DataFrame(day_of_week_data, columns=['Day of the Week', 'Trip Count'])
 
 # Create a Plotly Go bar chart (named fig_5)
-fig_5 = go.Figure(go.Bar(
+fig_4 = go.Figure(go.Bar(
     x=df_day_of_week['Day of the Week'],
     y=df_day_of_week['Trip Count'],
     text=df_day_of_week['Trip Count'],
@@ -386,7 +327,7 @@ fig_5 = go.Figure(go.Bar(
 ))
 
 # Update the title and other properties of the bar chart
-fig_5.update_layout(
+fig_4.update_layout(
     title='Number of Trips for Each Day of the Week',
     xaxis_title='Day of the Week',
     yaxis_title='Number of Trips',
@@ -395,7 +336,7 @@ fig_5.update_layout(
 )
 
 # Display the fig_5 bar chart in your Streamlit app
-col2.plotly_chart(fig_5)
+col2.plotly_chart(fig_4)
 
 
 

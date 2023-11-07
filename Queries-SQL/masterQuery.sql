@@ -66,21 +66,20 @@ LINES TERMINATED BY '\n' IGNORE 1 LINES;
 drop table if exists trips_data;
 CREATE TABLE if not exists trips_data(
 	
-    PULocationID INT,
-    DOLocationID INT,
-    trip_distance FLOAT,
-    total_amount DECIMAL,
-    passenger_count INT,
-    year INT,
-    month INT,
-    day INT,
+    PU_location_id INT,
+    DO_location_id INT,
+    Trip_distance FLOAT,
+    Total_amount DECIMAL,
+    Year INT,
+    Month INT,
+    Day INT,
     PU_time VARCHAR(6),
     DO_time VARCHAR(6),
-    trip_time INT,
-    type_service INT,
-    FOREIGN KEY(PULocationID) REFERENCES taxi_zone(OBJECTID),
-    FOREIGN KEY(DOLocationID) REFERENCES taxi_zone(OBJECTID),
-    FOREIGN KEY(Type_Service) REFERENCES type_service(Type_ServiceID)
+    Trip_time INT,
+    Service_type_id INT,
+    FOREIGN KEY(PU_location_id) REFERENCES locations(Location_id),
+    FOREIGN KEY(DO_location_id) REFERENCES locations(Location_id),
+    FOREIGN KEY(Service_type_id) REFERENCES service_types(Service_type_id)
     );
     
 

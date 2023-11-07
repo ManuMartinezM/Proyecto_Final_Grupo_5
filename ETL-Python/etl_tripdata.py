@@ -22,6 +22,11 @@ def clean_df(df, service_type):
 
     df['type_service'] = 1 if service_type == 'fhvhv' else 0  # 0 stands for 'not for hire vehicle'
 
+    df['DOLocationID'].replace(57, 56, inplace=True)
+    df['PULocationID'].replace(57, 56, inplace=True)
+    df['PULocationID'].replace([104, 105], 103, inplace=True)
+    df['DOLocationID'].replace([104, 105], 103, inplace=True)
+
     # We no longer need the datetimes since we've extracted them into year, month, day and time
     to_drop = ['pickup_datetime', 'dropoff_datetime']
     df.drop(columns=to_drop, inplace=True)

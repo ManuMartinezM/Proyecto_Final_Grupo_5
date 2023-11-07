@@ -2,7 +2,7 @@ import pandas as pd
 from dbfread import DBF
 import warnings
 warnings.filterwarnings("ignore")
-path_file = './Datasets/taxi_zones.dbf'
+path_file = '/taxi_zones.dbf'
 
 registros = []
 with DBF(path_file) as dbf:
@@ -11,6 +11,8 @@ with DBF(path_file) as dbf:
 
 df = pd.DataFrame(registros)
 
-df = df[['OBJECTID','LocationID','borough','zone']]
+df = df[['OBJECTID','zone','borough']]
 
-df.to_csv('./clean_data/clean_taxi_zone.csv',index=False, sep=';')
+df=df.rename(columns={'OBJECTID':'Location_id','zone':'Location_name','borough':'Borough'})
+df=df.drop_duplicates(subset=['Location_name','Borough'])
+df.to_csv('clean_data/clean_taxi_zone.csv',index=False, sep=';')

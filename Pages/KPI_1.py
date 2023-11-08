@@ -195,8 +195,8 @@ def display_KPI_1_page():
 
     # Update the title and other properties of the donut chart
     fig_2.update_layout(
-        title='Airport Trips vs. Other Trips',
-        showlegend=False,  # Hide legend to create a donut chart
+        title='vs. Other Trips',
+        showlegend=False,
         width=fig_width,
         height=fig_height
     )

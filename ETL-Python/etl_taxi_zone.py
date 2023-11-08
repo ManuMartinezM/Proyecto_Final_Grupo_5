@@ -15,4 +15,4 @@ df = df[['OBJECTID','zone','borough']]
 
 df=df.rename(columns={'OBJECTID':'Location_id','zone':'Location_name','borough':'Borough'})
 df=df.drop_duplicates(subset=['Location_name','Borough'])
-df.to_csv('clean_data/clean_taxi_zone.csv',index=False, sep=';')
+df.to_csv('clean_data/clean_taxi_zone.parquet',index=False, sep=';')

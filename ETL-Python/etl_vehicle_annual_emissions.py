@@ -27,4 +27,4 @@ df = df.rename(columns={'annual_fuel_use': 'Fuel_use', 'annual_electricity_use':
 df = df[['Year', 'Brand', 'Model', 'Fuel', 'Fuel_use', 'Electricity_use',
          'Fuel_elec_cost', 'Operating_cost', 'Cost_per_mile', 'Annual_emissions_lbs_co2']]
 
-df.to_csv('../clean_data/clean_vehicle_annual_emissions.csv', index=False)
+df.to_csv('../clean_data/clean_vehicle_annual_emissions.parquet', index=False)

@@ -43,19 +43,19 @@ LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
 
 # Data report monthly 
-drop table if exists data_report_monthly;
-CREATE TABLE if not exists data_report_monthly(
-	ID INT PRIMARY KEY,
-    License_Class INT,
+drop table if exists monthly_reports;
+CREATE TABLE if not exists monthly_reports(
+	Report_id INT PRIMARY KEY,
+    Service_type_id INT,
     Year INT,
     Month int,
-    Total_Trips INT,
-    Total_Shared_Trips INT,
-    Unique_Vehicles VARCHAR(50),
-    FOREIGN KEY(License_Class) REFERENCES type_service(Type_ServiceID));
+    Trips_per_day INT,
+    Shared_trips_per_day INT,
+    Unique_vehicles VARCHAR(50),
+    FOREIGN KEY(Service_type_id) REFERENCES service_types(Service_type_id));
 
 LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_data_report_monthly.csv'
-INTO TABLE data_report_monthly  
+INTO TABLE monthly_reports 
 FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
 LINES TERMINATED BY '\n' IGNORE 1 LINES;
 

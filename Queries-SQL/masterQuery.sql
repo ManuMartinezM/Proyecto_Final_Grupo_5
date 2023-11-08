@@ -29,7 +29,6 @@ LINES TERMINATED BY '\n' IGNORE 1 LINES;
 # fuel_vehicles
 drop table if exists fuel_vehicles;
 CREATE TABLE if not exists fuel_vehicles(
-    Vehicle_id INT PRIMARY KEY AUTO_INCREMENT,
     Year INT,
     Brand VARCHAR(50),
     Model VARCHAR(50),
@@ -58,8 +57,6 @@ LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_d
 INTO TABLE monthly_reports 
 FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
 LINES TERMINATED BY '\n' IGNORE 1 LINES;
-
-
 
 
 # Trips data
@@ -150,4 +147,22 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 LINES;
 
+DROP TABLE IF EXISTS Annual_vehicle_emissions;
+CREATE TABLE IF NOT EXISTS Annual_vehicle_emissions (
+    Vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
+    Year INT,
+    Brand VARCHAR(255),
+    Model VARCHAR(255),
+    Fuel VARCHAR(255),
+    Fuel_use INT,
+    Electricity_use INT,
+    Fuel_elec_cost INT,
+    Operating_cost INT ,
+    Cost_per_mile DECIMAL(10, 2),
+    Annual_emissions_lbs_co2 DECIMAL(10,2 )
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_vehicle_annual_emissions.csv.csv' 
+INTO TABLE Annual_vehicle_emissions
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' 
+LINES TERMINATED BY '\n' IGNORE 1 LINES;

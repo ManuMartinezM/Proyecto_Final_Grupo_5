@@ -15,4 +15,5 @@ df['Unique Vehicles'] = df['Unique Vehicles'].str.replace(',', '', regex=True).a
 filtered_df = df[(df['Year'] == 2023) | (df['Year'] == 2022)]
 dfKPI2= filtered_df.groupby(['License Class', 'Year', 'Month']).agg({'Trips Per Day': 'sum', 'Trips Per Day Shared': 'sum', 'Unique Vehicles':'sum'}).reset_index()
 
+df=df.rename(columns={'':'','':'Location_name','borough':'Borough'})
 dfKPI2.to_csv('KPI_2_ShareTrips.csv', sep=';')

@@ -2,16 +2,45 @@ drop database if exists NYC_TAXIS;
 create database if not exists NYC_TAXIS;
 USE NYC_TAXIS;
 
-# Tipe service
-drop table if exists type_service;
-CREATE TABLE if not exists type_service(
-	Type_ServiceID INT  PRIMARY KEY,
-    Service VARCHAR(20)
+# Service types
+drop table if exists service_types;
+CREATE TABLE if not exists service_types(
+	Service_type_id INT  PRIMARY KEY,
+    Service_name VARCHAR(20)
     );
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\type_services.csv'
-INTO TABLE type_service  
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\service_types.csv'
+INTO TABLE service_types  
 FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
 LINES TERMINATED BY '\n' IGNORE 1 LINES;
+
+# locations
+drop table if exists locations;
+CREATE TABLE if not exists locations(
+    Location_id INT PRIMARY KEY,
+    Location_name VARCHAR(150),
+    Borough VARCHAR(30)
+	);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_taxi_zone.csv'
+INTO TABLE locations
+FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
+LINES TERMINATED BY '\n' IGNORE 1 LINES;
+
+# fuel_vehicles
+drop table if exists fuel_vehicles;
+CREATE TABLE if not exists fuel_vehicles(
+    Vehicle_id INT PRIMARY KEY AUTO_INCREMENT,
+    Year INT,
+    Brand VARCHAR(50),
+    Model VARCHAR(50),
+    co2_emission_gpm FLOAT(6,2));
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_Vehicle Fuel Economy Data.csv'
+INTO TABLE fuel_vehicles
+FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
+LINES TERMINATED BY '\n' IGNORE 1 LINES;
+
+
 
 # Data report monthly 
 drop table if exists data_report_monthly;
@@ -30,50 +59,27 @@ INTO TABLE data_report_monthly
 FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
 LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
-# Taxi zone
-drop table if exists taxi_zone;
-CREATE TABLE if not exists taxi_zone(
-    OBJECTID INT PRIMARY KEY,
-	LocationID INT,
-    Borough VARCHAR(30),
-    Zone VARCHAR(150));
 
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_taxi_zone.csv'
-INTO TABLE taxi_zone  
-FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
-LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
-# Vehicle Fuel economy
-drop table if exists vehicle_fuel_economy;
-CREATE TABLE if not exists vehicle_fuel_economy(
-    ID INT PRIMARY KEY,
-    Model VARCHAR(50),
-    Co2 FLOAT(6,2));
-
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_Vehicle Fuel Economy Data.csv'
-INTO TABLE vehicle_fuel_economy  
-FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
-LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
 # Trips data
 drop table if exists trips_data;
 CREATE TABLE if not exists trips_data(
 	
-    PULocationID INT,
-    DOLocationID INT,
-    trip_distance FLOAT,
-    total_amount DECIMAL,
-    passenger_count INT,
-    year INT,
-    month INT,
-    day INT,
+    PU_location_id INT,
+    DO_location_id INT,
+    Trip_distance FLOAT,
+    Total_amount DECIMAL,
+    Year INT,
+    Month INT,
+    Day INT,
     PU_time VARCHAR(6),
     DO_time VARCHAR(6),
-    trip_time INT,
-    type_service INT,
-    FOREIGN KEY(PULocationID) REFERENCES taxi_zone(OBJECTID),
-    FOREIGN KEY(DOLocationID) REFERENCES taxi_zone(OBJECTID),
-    FOREIGN KEY(Type_Service) REFERENCES type_service(Type_ServiceID)
+    Trip_time INT,
+    Service_type_id INT,
+    FOREIGN KEY(PU_location_id) REFERENCES locations(Location_id),
+    FOREIGN KEY(DO_location_id) REFERENCES locations(Location_id),
+    FOREIGN KEY(Service_type_id) REFERENCES service_types(Service_type_id)
     );
     
 
@@ -132,8 +138,8 @@ IGNORE 1 LINES;
 DROP TABLE IF EXISTS light_duty_vehicles;
 CREATE TABLE IF NOT EXISTS light_duty_vehicles (
     Model VARCHAR(255),
-    ModelYear INT,
-    Manufacturer VARCHAR(255),
+    Year INT,
+    Brand VARCHAR(255),
     Fuel VARCHAR(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 

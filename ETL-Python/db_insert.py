@@ -38,7 +38,14 @@ def find_files_to_clean(bucket, key, secret):
 
 
 def clean_s3_file(filename, service_type, bucket, key, secret):
-    df = pd.read_parquet(f"s3://{bucket}/raw/{service_type}/{filename}", storage_options={'key': key, 'secret': secret})
+    (_, extension) = os.path.splitext(filename)
+    if extension == '.csv':
+        df = pd.read_csv(f"s3://{bucket}/raw/{service_type}/{filename}", storage_options={'key': key, 'secret': secret})
+    elif extension == '.parquet':
+        df = pd.read_parquet(f"s3://{bucket}/raw/{service_type}/{filename}",
+                             storage_options={'key': key, 'secret': secret})
+    else:
+        raise Exception(f'Unkown extension {extension}')
 
     clean_df(df, service_type)
 

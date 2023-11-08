@@ -1,5 +1,6 @@
 import streamlit as st
 import pymysql
+import pyathena
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px

@@ -1,5 +1,6 @@
 import streamlit as st
 import pymysql
+import pyathena
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
@@ -83,12 +84,6 @@ def display_KPI_3_page():
         year_condition = "year = 2023"
     else:  # "Both" (no filter)
         year_condition = "1=1"
-
-    # Combine conditions to create the final SQL query
-    sql_query_1 = f"SELECT * FROM trips_data WHERE {type_service_condition} AND {year_condition}"
-
-    # Use pandas to read the SQL query results into a DataFrame
-    df_1 = pd.read_sql(sql_query_1, connection)
 
     # Define a custom color palette
     color_palette = ['#ADD8E6', '#90EE90', '#FFA07A', '#D3D3D3', '#FFFFE0', '#87CEEB', '#98FB98', '#FFD700', '#C0C0C0', '#FFA500']

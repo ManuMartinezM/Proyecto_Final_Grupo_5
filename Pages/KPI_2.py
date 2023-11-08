@@ -1,29 +1,48 @@
 import streamlit as st
+import pymysql
+import pyathena
+import pandas as pd
+import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
-import matplotlib.pyplot as plt
-import pandas as pd
-from datetime import datetime
-import os
-import warnings
 
 def display_KPI_2_page():
 
     st.header("KPI: 5% increase in demand for shared rides between 2022 and 2023")
     st.markdown("***")
 
-    data_reports_monthly = pd.read_csv('data_reports_monthly.csv')
+    # Replace these values with your database information
+    host = 'database-1.cb8vqbpvimzr.us-east-2.rds.amazonaws.com'
+    user = 'admin'
+    password = 'adminadmin'
+    database = 'NYC_TAXIS'
 
-    # Replace '-' with 0 in 'Trips Per Day Shared' column and convert it to numeric
-    data_reports_monthly['Trips Per Day Shared'] = data_reports_monthly['Trips Per Day Shared'].str.replace(',', '', regex=True).replace('-', 0).astype(float)
+    # Establish a connection to the database
+    connection = pymysql.connect(host=host, user=user, password=password, database=database)
+    cursor = connection.cursor()
 
-    # Calculate the percentage increase in shared trips between 2022 and 2023
-    shared_trips_2022 = data_reports_monthly[data_reports_monthly['Month/Year'].str.contains('2022')]['Trips Per Day Shared'].sum()
-    shared_trips_2023 = data_reports_monthly[data_reports_monthly['Month/Year'].str.contains('2023')]['Trips Per Day Shared'].sum()
-    demand_increase = ((shared_trips_2023 - shared_trips_2022) / shared_trips_2022) * 100
-
-    # Define the KPI objective
+    # Define KPI objective
     kpi_objective = 5  # Adjust this value as needed
+
+    # SQL query to calculate shared trips demand for 2022 and 2023
+    sql_query = """
+        SELECT
+            SUM(CASE WHEN Year = 2022 THEN Total_Shared_Trips ELSE 0 END) AS shared_trips_2022,
+            SUM(CASE WHEN Year = 2023 THEN Total_Shared_Trips ELSE 0 END) AS shared_trips_2023
+        FROM data_report_monthly
+    """
+
+    # Execute the query
+    cursor.execute(sql_query)
+    shared_trips_data = cursor.fetchone()
+
+    # Calculate the demand increase
+    shared_trips_2022 = shared_trips_data[0]
+    shared_trips_2023 = shared_trips_data[1]
+    if shared_trips_2022 == 0:
+        demand_increase = None
+    else:
+        demand_increase = ((shared_trips_2023 - shared_trips_2022) / shared_trips_2022) * 100
 
     # Define CSS styles based on KPI status (met or not met)
     kpi_style = f"""
@@ -33,106 +52,142 @@ def display_KPI_2_page():
         color: white;
         display: flex;
         justify-content: space-between;
-        background-color: {"#4CAF50" if demand_increase >= kpi_objective else "#FF5733"};
+        background-color: {"#4CAF50" if demand_increase and demand_increase >= kpi_objective else "#FF5733"};
     """
 
-    # Display the KPI banner with custom styling
-    st.markdown(f'<div style="{kpi_style}">Goal: {kpi_objective}%<div>{"KPI goal met!" if demand_increase >= kpi_objective else "KPI not met"}</div></div>', unsafe_allow_html=True)
+    # Display the KPI banner
+    st.markdown(f'<div style="{kpi_style}">Goal: {kpi_objective}%<div>{"KPI goal met!" if demand_increase and demand_increase >= kpi_objective else "KPI not met"}</div></div>', unsafe_allow_html=True)
 
     # Display the KPI banner
-    if demand_increase >= 5:
-        st.success('Demand for shared taxi rides increased by {:.2f}%.'.format(demand_increase))
-    elif demand_increase >= 0:
-        st.error('Demand for shared taxi rides increased by only {:.2f}%.'.format(demand_increase))
-    else:
-        st.error('Demand for shared taxi rides decreased by {:.2f}%.'.format(demand_increase))
+    title_suffix = "Shared Rides"
+    if demand_increase and demand_increase >= 5:
+        st.success(f'Demand for {title_suffix} increased by {demand_increase:.2f}%.')
+    elif demand_increase and demand_increase >= 0:
+        st.error(f'Demand for {title_suffix} increased by only {demand_increase:.2f}%.')
+    elif demand_increase is not None:
+        st.error(f'Demand for {title_suffix} decreased by {demand_increase:.2f}%.')
 
-    # Define a consistent figure size
-    fig_width = 300
-    fig_height = 300
+    # Sidebar filter for Type of Service
+    service_filter = st.sidebar.selectbox("Filter by Type of Service", ["Both", "For-Hire", "Not For-Hire"])
+
+    # Sidebar filter for Year
+    year_filter = st.sidebar.selectbox("Filter by Year", ["Both", "2022", "2023"])
 
     # Define a custom color palette
-    color_palette = ['#ADD8E6', '#90EE90', '#808080']
+    color_palette = ['#ADD8E6', '#90EE90', '#FFA07A', '#D3D3D3', '#FFFFE0', '#87CEEB', '#98FB98', '#FFD700', '#C0C0C0', '#FFA500']
 
-    # Create a sidebar slider to select the year range
-    year_range = st.sidebar.slider("Select a year range:", 2015, 2023, (2021, 2023))
-
-    # Filter the data based on the selected year range
-    data_filtered = data_reports_monthly[data_reports_monthly['Month/Year'].str.contains('|'.join(map(str, range(year_range[0], year_range[1] + 1))))]
-
-    # Define distinct colors for "For Hire" and "Not For Hire" categories
-    category_colors = ['#ADD8E6', '#90EE90']
-
-    # Create a bar chart with Plotly
-    fig1 = px.bar(data_filtered, x='Month/Year', y='Trips Per Day Shared', title=f'Trend of Shared Trips ({year_range[0]}-{year_range[1]})')
-
-    # Customize the figure layout
-    fig1.update_layout(
-        xaxis_title='Month/Year',
-        yaxis_title='Trips Per Day Shared',
-        xaxis=dict(tickangle=-45),
-        plot_bgcolor='white',  # Background color
-    )
-
-    # Set figure dimensions
-    fig1.update_layout(
-        width=fig_width,
-        height=fig_height
-    )
-
-    # Apply the custom color palette
-    fig1.update_traces(marker_color=color_palette[0])  # Update the bar color
+    # Define a consistent figure size
+    fig_width = 350
+    fig_height = 450
 
     # Create columns to display figures and titles side by side
     col1, col2, col3 = st.columns(3)
 
-    # Display the figure using st.plotly_chart within the specified column
-    with col1:
-        st.plotly_chart(fig1)
+    # Build the WHERE clause for SQL query based on filters
+    where_clause = ""
+    if service_filter != "Both":
+        where_clause += f" AND License_Class = {'1' if service_filter == 'For-Hire' else '0'}"
+    if year_filter != "Both":
+        where_clause += f" AND Year = {year_filter}"
 
-    # Group the license classes into two categories
-    for_hire_classes = ["FHV - Black Car", "FHV - High Volume", "FHV - Livery", "FHV - Lux Limo"]
-    not_for_hire_classes = ["Green", "Yellow"]
+    # SQL query to calculate shared trips demand
+    sql_query_1 = f"""
+        SELECT
+            Year,
+            SUM(Total_Shared_Trips) AS Shared_Trips
+        FROM data_report_monthly
+        WHERE Year IN (2022, 2023){where_clause}
+        GROUP BY Year
+    """
 
-    data_filtered['Category'] = data_filtered['License Class'].apply(lambda x: 'For Hire' if x in for_hire_classes else 'Not For Hire')
+    # Execute the query
+    cursor.execute(sql_query_1)
 
-    # Group the data by 'Category' and 'Month/Year' and sum the shared trips
-    grouped_data = data_filtered.groupby(['Category', 'Month/Year'])['Trips Per Day Shared'].sum().reset_index()
+    # Read the SQL query results into a DataFrame
+    df_1 = pd.read_sql(sql_query_1, connection)
 
-    # Create a pie chart with Plotly
-    fig2 = px.pie(data_filtered, names='Category', title=f'Category Distribution ({year_range[0]}-{year_range[1]})',
-                color_discrete_sequence=category_colors)
+    # Define a custom color palette
+    color_palette = ['#ADD8E6', '#90EE90']
 
-    # Set figure dimensions
-    fig2.update_layout(
+    # Define a consistent figure size
+    fig_width = 350
+    fig_height = 450
+
+    # Create columns to display figures and titles side by side
+    col1, col2, col3 = st.columns(3)
+
+    # Create a bar chart using Plotly Go
+    fig_1 = go.Figure()
+
+    fig_1.add_trace(go.Bar(
+        x=df_1['Year'],
+        y=df_1['Shared_Trips'],
+        marker_color=color_palette,
+    ))
+
+    # Update the layout
+    fig_1.update_layout(
+        title="Number of Shared Trips",
+        xaxis_title="Year",
+        yaxis_title="Number of Shared Trips",
+        xaxis={'type': 'category'},
         width=fig_width,
         height=fig_height
     )
 
-    # Display the figure using st.plotly_chart
-    with col2:
-        st.plotly_chart(fig2)
+    # Show the chart using Streamlit
+    col1.plotly_chart(fig_1)
 
-    # Create a stacked area chart with Plotly
-    fig3 = px.area(data_filtered, x='Month/Year', y='Trips Per Day Shared', color='Category',
-                title=f'Stacked Area Chart ({year_range[0]}-{year_range[1]})',
-                labels={'Month/Year': 'Month/Year', 'Trips Per Day Shared': 'Total Trips Per Day Shared'},
-                color_discrete_sequence=category_colors)
+    # Define the SQL query for the pie chart
+    sql_query_2 = """
+        SELECT
+            SUM(Total_Shared_Trips) AS Shared_Trips,
+            SUM(Total_Trips) AS Total_Trips
+        FROM data_report_monthly
+        WHERE 1=1
+    """
+
+    # Modify the query based on the selected filters
+    if service_filter == "For-Hire":
+        sql_query_2 += " AND License_Class = '1'"
+    elif service_filter == "Not For-Hire":
+        sql_query_2 += " AND License_Class = '0'"
+
+    # Use manual formatting for year filter
+    if year_filter == "2022":
+        sql_query_2 += " AND Year = 2022"
+    elif year_filter == "2023":
+        sql_query_2 += " AND Year = 2023"
+
+    # Execute the SQL query and fetch the results
+    cursor.execute(sql_query_2)
+    data_2 = cursor.fetchall()
+
+    # Create the pie chart
+    shared_trips = data_2[0][0]
+    total_trips = data_2[0][1]
+
+    fig_2 = go.Figure(data=[go.Pie(
+        labels=["Shared Trips", "Total Trips"],
+        values=[shared_trips, total_trips],
+        marker=dict(colors=color_palette)  # Set custom colors
+    )])
 
     # Customize the figure layout
-    fig3.update_layout(
-        xaxis_title='Month/Year',
-        yaxis_title='Total Trips Per Day Shared',
-        xaxis=dict(tickangle=-45),
-        plot_bgcolor='white',  # Background color
-    )
-
-    # Set figure dimensions
-    fig3.update_layout(
+    fig_2.update_layout(
+        title="Comparison of Shared Trips vs. Total Trips",
         width=fig_width,
         height=fig_height
     )
 
-    # Display the figure using st.plotly_chart within the specified column
-    with col3:
-        st.plotly_chart(fig3)
+    # Show the chart using Streamlit
+    col2.plotly_chart(fig_2)
+
+
+
+
+    
+
+    # Close the cursor and connection
+    cursor.close()
+    connection.close()

@@ -526,3 +526,23 @@ Transportation Authority (MTA)? (Y/N)
 -	phevComb: Combined fuel consumption for plug-in hybrid vehicles.
 
 <h1></h1>
+
+
+# VEHICLE ANNUAL EMISSIONS
+<b>dataset:</b> clean_annual_emissions.csv
+
+- vehicle: The make and model of the vehicle, including the model year.
+
+- annual_fuel_use: The annual fuel consumption in gallons for the vehicle. Note that it may be 0 for electric vehicles (EVs).
+
+- annual_electricity_use: The annual electricity consumption in kilowatt-hours (kWh) for the vehicle. This column is only applicable to electric vehicles.
+
+- annual_fuel_elec_cost: The annual cost of fuel or electricity for operating the vehicle. It represents the total cost in dollars.
+
+- annual_operating_cost : The total annual operating cost of the vehicle, including fuel or electricity costs, maintenance, and other expenses, represented in dollars.
+
+- cost_per_mile: The cost per mile to operate the vehicle, which is calculated by dividing the annual operating cost by the mileage.
+
+- annual_emissions_lbs_CO2: The annual emissions of carbon dioxide (CO2) in pounds produced by the vehicle. It reflects the environmental impact of the vehicle's fuel or electricity consumption
+
+<h1></h1>

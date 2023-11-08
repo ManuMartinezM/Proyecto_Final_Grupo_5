@@ -26,21 +26,6 @@ INTO TABLE locations
 FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
 LINES TERMINATED BY '\n' IGNORE 1 LINES;
 
-# fuel_vehicles
-drop table if exists fuel_vehicles;
-CREATE TABLE if not exists fuel_vehicles(
-    Year INT,
-    Brand VARCHAR(50),
-    Model VARCHAR(50),
-    co2_emission_gpm FLOAT(6,2));
-
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_Vehicle Fuel Economy Data.csv'
-INTO TABLE fuel_vehicles
-FIELDS TERMINATED BY ';' ENCLOSED BY '' ESCAPED BY '' 
-LINES TERMINATED BY '\n' IGNORE 1 LINES;
-
-
-
 # Data report monthly 
 drop table if exists monthly_reports;
 CREATE TABLE if not exists monthly_reports(
@@ -114,37 +99,6 @@ LINES TERMINATED BY '\n' IGNORE 1 LINES;
 ALTER TABLE trips_data ADD COLUMN TripID INT AUTO_INCREMENT PRIMARY KEY;
 SET @id := 0;
 UPDATE trips_data SET TripID = (@id := @id + 1);
-
-#Electric_Car_Data
-DROP TABLE IF EXISTS electric_car_data;
-CREATE TABLE IF NOT EXISTS electric_car_data (
-	Brand VARCHAR(255),
-    Model VARCHAR(255),
-    PriceUSD DECIMAL(10, 2)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
-
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_electric_car_data.csv' 
-INTO TABLE electric_car_data
-FIELDS TERMINATED BY ',' 
-ENCLOSED BY '"' 
-LINES TERMINATED BY '\n'
-IGNORE 1 LINES;
-
-# Light_Duty_Vehicles
-DROP TABLE IF EXISTS light_duty_vehicles;
-CREATE TABLE IF NOT EXISTS light_duty_vehicles (
-    Model VARCHAR(255),
-    Year INT,
-    Brand VARCHAR(255),
-    Fuel VARCHAR(255)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
-
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\PF\\clean_light_duty_vehicles.csv' 
-INTO TABLE light_duty_vehicles
-FIELDS TERMINATED BY ',' 
-ENCLOSED BY '"' 
-LINES TERMINATED BY '\n'
-IGNORE 1 LINES;
 
 DROP TABLE IF EXISTS Annual_vehicle_emissions;
 CREATE TABLE IF NOT EXISTS Annual_vehicle_emissions (

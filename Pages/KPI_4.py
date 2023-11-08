@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 
 def display_KPI_4_page():
 
-    st.header("KPI: 5% increase in demand in airport taxi rides")
+    st.header("KPI: 10% increase in average utility for vehicles")
     st.markdown("***")
 
     # Replace these values with your database information

@@ -156,6 +156,9 @@ def display_KPI_1_page():
     col1.plotly_chart(fig_1)
 
     # Define the base SQL query to calculate the count of airport trips and non-airport trips
+    # Combine conditions with the base query
+
+    # Define the base SQL query to calculate the count of airport trips and non-airport trips
     base_donut_query = """
         SELECT
             CASE
@@ -168,6 +171,8 @@ def display_KPI_1_page():
         WHERE type_service IN (0, 1)
         GROUP BY trip_type
     """
+
+    donut_query = f"{base_donut_query} WHERE 1=1 {type_service_condition} {year_condition} GROUP BY trip_type"
 
     # Add conditions to the SQL query based on selected filters
     if filter_type_service == "For-Hire":

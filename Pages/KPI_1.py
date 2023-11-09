@@ -162,23 +162,6 @@ def display_KPI_1_page():
 
 #Second Graph:
     # Define the base SQL query to calculate the count of airport trips and non-airport trips
-<<<<<<< HEAD
-    # Combine conditions with the base query
-
-    # Define the base SQL query to calculate the count of airport trips and non-airport trips
-    base_donut_query = """
-        SELECT
-            CASE
-                WHEN type_service = 1 THEN 'For-Hire'
-                WHEN type_service = 0 THEN 'Not For-Hire'
-                ELSE 'Other'
-            END AS trip_type,
-            COUNT(*) AS trip_count
-        FROM trips_data
-        WHERE type_service IN (0, 1)
-        GROUP BY trip_type
-    """
-=======
     base_donut_query = '''
     SELECT
         CASE
@@ -194,7 +177,6 @@ def display_KPI_1_page():
             WHEN service_type_id = 0 THEN 'Not For-Hire'
             ELSE 'Other'
         END'''
->>>>>>> fb42b5f7e86382638bcb6126eb56c91b6e8385d5
 
     donut_query = f"{base_donut_query} WHERE 1=1 {type_service_condition} {year_condition} GROUP BY trip_type"
 

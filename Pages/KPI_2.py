@@ -69,8 +69,20 @@ def display_KPI_2_page():
 
     # Display the KPI banner
     st.markdown(f'<div style="{kpi_style}">Goal: {kpi_objective}%<div>{"KPI goal met!" if shared_trips_data and shared_trips_data >= kpi_objective else "KPI not met"}</div></div>', unsafe_allow_html=True)
-
-
+    
+    # Display the KPI banner
+    title_suffix = "Shared Rides"
+    if shared_trips_data is not None:
+        if shared_trips_data >= 5:
+            st.success(f'Demand for {title_suffix} increased by {shared_trips_data:.2f}%.')
+        elif shared_trips_data >= 0:
+            st.error(f'Demand for {title_suffix} increased by only {shared_trips_data:.2f}%.')
+        else:
+            st.error(f'Demand for {title_suffix} decreased by {shared_trips_data:.2f}%.')
+    else:
+    # Handle the case when shared_trips_data is None (no data)
+        st.warning(f'No data available to calculate the increase in demand for {title_suffix}.')
+    
     # Sidebar filter for Type of Service
     service_filter = st.sidebar.selectbox("Filter by Type of Service", ["Both", "For-Hire", "Not For-Hire"])
 

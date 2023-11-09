@@ -37,17 +37,17 @@ def display_KPI_3_page():
             (SELECT AVG(trip_distance) AS trip_distance, SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
             FROM trips_data
             WHERE year = 2022
-            AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138)) ) AS initial,
+            AND (pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138)) ) AS initial,
             (SELECT AVG(trip_distance) AS trip_distance, SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
             FROM trips_data
             WHERE year = 2023
-            AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138)) ) AS final
+            AND (pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138)) ) AS final
     """
 
     # Execute the SQL query and retrieve the results
     with conn.cursor() as cursor:
         cursor.execute(kpi_query)
-        demand_increase = cursor.fetchall()
+        demand_increase = cursor.fetchone()[0] 
 
     # Define the title and KPI objective
     title_suffix = "Airport Trips"
@@ -121,12 +121,12 @@ def display_KPI_3_page():
                     SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
             FROM trips_data
             WHERE year = 2022
-            AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138) {type_service_condition}) ) AS initial,
+            AND (pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138) {type_service_condition}) ) AS initial,
             (SELECT AVG(trip_distance) AS trip_distance, 
                     SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
             FROM trips_data
             WHERE year = 2023
-            AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138) {type_service_condition}) ) AS final
+            AND (pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138) {type_service_condition}) ) AS final
     """
 
     # Execute the percentage growth query
@@ -168,9 +168,9 @@ def display_KPI_3_page():
     base_donut_query = """
         SELECT
             CASE
-                WHEN PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138) THEN 'Airport Trips'
+                WHEN pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138) THEN 'Airport Trips'
                 ELSE 'Other Trips'
-            END AS trip_type,
+            END AS service_type_id,
             COUNT(*) AS trip_count
         FROM trips_data
     """
@@ -191,19 +191,19 @@ def display_KPI_3_page():
         year_condition = ""
 
     # Combine conditions with the base query
-    donut_query = base_donut_query + f" WHERE 1=1 {type_service_condition} {year_condition} GROUP BY trip_type"
+    donut_query = base_donut_query + f" WHERE 1=1 {type_service_condition} {year_condition} GROUP BY CASE WHEN PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138) THEN 'Airport Trips' ELSE 'Other Trips' END"
 
     # Execute the donut query and fetch the result
     cursor.execute(donut_query)
     donut_data = cursor.fetchall()
 
     # Create a DataFrame from the SQL query result
-    df_donut = pd.DataFrame(donut_data, columns=['trip_type', 'trip_count'])
+    df_donut = pd.DataFrame(donut_data, columns=['service_type_id', 'trip_count'])
 
     # Create a donut chart using Plotly Go with specified colors for slices
     fig_2 = go.Figure(data=[
         go.Pie(
-            labels=df_donut['trip_type'],
+            labels=df_donut['service_type_id'],
             values=df_donut['trip_count'],
             marker=dict(colors=color_palette)
         )
@@ -220,13 +220,13 @@ def display_KPI_3_page():
     # Display the donut chart in your Streamlit app
     col2.plotly_chart(fig_2)
 
-    # SQL query to join trips_data with taxi_zone and count trips to airport destinations
+    # SQL query to join trips_data with taxi_location_name and count trips to airport destinations
     top_pickup_query = """
-        SELECT tz.Zone, COUNT(*) AS trip_count
+        SELECT tz.location_name, COUNT(*) AS trip_count
         FROM trips_data AS td
         JOIN locations AS tz
-        ON td.PULocationID = tz.LocationID
-        WHERE DOLocationID IN (1, 132, 138)
+        ON td.pulocationid = tz.location_id
+        WHERE dolocationid IN (1, 132, 138)
     """
 
     # Add conditions based on the filter_type_service value
@@ -245,10 +245,11 @@ def display_KPI_3_page():
     # Add year filter condition
     top_pickup_query += year_condition
 
+    # Combine conditions with the base query
     top_pickup_query += """
-        GROUP BY tz.Zone
+        GROUP BY tz.location_name
         ORDER BY trip_count DESC
-        LIMIT 10  # Select the top 10 locations with the most trips
+        LIMIT 10
     """
 
     # Execute the SQL query and fetch the result
@@ -256,14 +257,14 @@ def display_KPI_3_page():
     top_pickup_data = cursor.fetchall()
 
     # Create a DataFrame from the SQL query result
-    df_top_pickup = pd.DataFrame(top_pickup_data, columns=['Zone', 'trip_count'])
+    df_top_pickup = pd.DataFrame(top_pickup_data, columns=['location_name', 'trip_count'])
 
     # Sort the DataFrame by trip_count in descending order (for the bar chart)
     df_top_pickup = df_top_pickup.sort_values(by='trip_count', ascending=False)
 
     # Create a bar chart using Plotly Go (with the name fig_3)
     fig_3 = go.Figure(go.Bar(
-        x=df_top_pickup['Zone'],
+        x=df_top_pickup['location_name'],
         y=df_top_pickup['trip_count'],
         text=df_top_pickup['trip_count'],
         textposition='outside',
@@ -273,7 +274,7 @@ def display_KPI_3_page():
     # Update the title and other properties of the bar chart
     fig_3.update_layout(
         title='Top 10 Pick-up Locations with Most Trips to Airport Destinations',
-        xaxis_title='Location (Zone)',
+        xaxis_title='Location (location_name)',
         yaxis_title='Number of Trips',
         width=fig_width,
         height=fig_height
@@ -283,10 +284,14 @@ def display_KPI_3_page():
 
     # SQL query to count trips for each day of the week and order by the desired order
     day_of_week_query = """
-        SELECT DAYNAME(DATE(CONCAT(year, '-', month, '-', day))) AS day_of_week, COUNT(*) AS trip_count
-        FROM trips_data
-        WHERE year IN (2022, 2023)
-        AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138))
+        SELECT
+            EXTRACT(DAY_OF_WEEK FROM DATE(CAST(year AS VARCHAR) || '-' || CAST(month AS VARCHAR) || '-' || CAST(day AS VARCHAR))) AS day_of_week,
+            COUNT(*) AS trip_count
+        FROM
+            trips_data
+        WHERE
+            year IN (2022, 2023)
+            AND (pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138))
     """
 
     # Add conditions based on the filter_type_service value
@@ -301,10 +306,20 @@ def display_KPI_3_page():
     elif filter_year == "2023":
         day_of_week_query += " AND year = 2023"
 
-    # Group the data by day of the week
+    # Use a CASE statement to assign numerical values to days of the week
     day_of_week_query += """
-        GROUP BY day_of_week
-        ORDER BY FIELD(day_of_week, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
+        GROUP BY
+            EXTRACT(DAY_OF_WEEK FROM DATE(CAST(year AS VARCHAR) || '-' || CAST(month AS VARCHAR) || '-' || CAST(day AS VARCHAR)))
+        ORDER BY
+            CASE
+                WHEN day_of_week = 2 THEN 1
+                WHEN day_of_week = 3 THEN 2
+                WHEN day_of_week = 4 THEN 3
+                WHEN day_of_week = 5 THEN 4
+                WHEN day_of_week = 6 THEN 5
+                WHEN day_of_week = 7 THEN 6
+                WHEN day_of_week = 1 THEN 7
+            END
     """
 
     # Execute the SQL query and fetch the result
@@ -312,13 +327,13 @@ def display_KPI_3_page():
     day_of_week_data = cursor.fetchall()
 
     # Create a DataFrame from the SQL query result
-    df_day_of_week = pd.DataFrame(day_of_week_data, columns=['Day of the Week', 'Trip Count'])
+    df_day_of_week = pd.DataFrame(day_of_week_data, columns=['day_of_week', 'trip_count'])
 
     # Create a Plotly Go bar chart (named fig_5)
     fig_4 = go.Figure(go.Bar(
-        x=df_day_of_week['Day of the Week'],
-        y=df_day_of_week['Trip Count'],
-        text=df_day_of_week['Trip Count'],
+        x=df_day_of_week['day_of_week'],
+        y=df_day_of_week['trip_count'],
+        text=df_day_of_week['trip_count'],
         textposition='outside',
         marker_color=color_palette  # Use the color palette here
     ))

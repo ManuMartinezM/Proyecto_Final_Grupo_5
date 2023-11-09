@@ -43,7 +43,11 @@ def display_KPI_2_page():
         cursor.execute(kpi_query)
         shared_trips_data = cursor.fetchall()
 
+<<<<<<< HEAD
     # Check if shared_trips_data contains at least one row
+=======
+   # Check if shared_trips_data contains at least one row
+>>>>>>> fb42b5f7e86382638bcb6126eb56c91b6e8385d5
     if len(shared_trips_data) > 0:
         shared_trips_2022 = shared_trips_data[0][0]
         shared_trips_2023 = shared_trips_data[0][1]
@@ -68,7 +72,11 @@ def display_KPI_2_page():
 
     # Display the KPI banner
     st.markdown(f'<div style="{kpi_style}">Goal: {kpi_objective}%<div>{"KPI goal met!" if shared_trips_data and shared_trips_data >= kpi_objective else "KPI not met"}</div></div>', unsafe_allow_html=True)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> fb42b5f7e86382638bcb6126eb56c91b6e8385d5
     # Display the KPI banner
 
     title_suffix = "Shared Rides"
@@ -80,9 +88,15 @@ def display_KPI_2_page():
         else:
             st.error(f'Demand for {title_suffix} decreased by {shared_trips_data:.2f}%.')
     else:
+<<<<<<< HEAD
         # Handle the case when shared_trips_data is None (no data)
         st.warning(f'No data available to calculate the increase in demand for {title_suffix}.')
 
+=======
+    # Handle the case when shared_trips_data is None (no data)
+        st.warning(f'No data available to calculate the increase in demand for {title_suffix}.')
+    
+>>>>>>> fb42b5f7e86382638bcb6126eb56c91b6e8385d5
     # Sidebar filter for Type of Service
     service_filter = st.sidebar.selectbox("Filter by Type of Service", ["Both", "For-Hire", "Not For-Hire"])
 
@@ -158,7 +172,11 @@ def display_KPI_2_page():
     sql_query_2 = """
         SELECT
             SUM(shared_trips_per_day) AS Shared_Trips,
+<<<<<<< HEAD
             SUM(trips_per_day) AS Total_Trips
+=======
+            SUM(trips_per_day) AS trips_per_day
+>>>>>>> fb42b5f7e86382638bcb6126eb56c91b6e8385d5
         FROM monthly_reports
         WHERE 1=1
     """

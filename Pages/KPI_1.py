@@ -74,8 +74,6 @@ def display_KPI_1_page():
     else:
         st.error(f'Demand for {title_suffix} service decreased by {demand_increase[0]:.2f}%.')
 
-
-
     # Create selectboxes in the Streamlit sidebar for filtering by "type_service" and "year"
     filter_service_type_id = st.sidebar.selectbox("Filter by service type", ["Both", "For-Hire", "Not For-Hire"])
     filter_year = st.sidebar.selectbox("Filter by year", ["Both", "2022", "2023"])
@@ -178,8 +176,6 @@ def display_KPI_1_page():
             ELSE 'Other'
         END'''
 
-    donut_query = f"{base_donut_query} WHERE 1=1 {type_service_condition} {year_condition} GROUP BY trip_type"
-
     # Add conditions to the SQL query based on selected filters
     if filter_service_type_id== "For-Hire":
         service_type_id_condition = "AND service_type_id = 1"
@@ -195,9 +191,6 @@ def display_KPI_1_page():
     else:  # "Both" (no filter)
         year_condition = ""
 
-    # Combine conditions with the base query
-    #donut_query = base_donut_query + f" WHERE 1=1 {service_type_id_condition} {year_condition} GROUP BY trip_type"
-    #donut_query = base_donut_query + f"GROUP BY trip_type HAVING 1=1 {service_type_id_condition} {year_condition}"
     # Execute the donut query and fetch the result
     cursor.execute(base_donut_query)
     donut_data = cursor.fetchall()
@@ -216,7 +209,7 @@ def display_KPI_1_page():
 
     # Update the title and other properties of the donut chart
     fig_2.update_layout(
-        title='Airport Trips vs. Other Trips',
+        title='For-Hire vs. Not For-Hire',
         showlegend=False,
         width=fig_width,
         height=fig_height
@@ -284,3 +277,85 @@ def display_KPI_1_page():
     )
 
     col3.plotly_chart(fig_3)
+
+    # SQL query to count trips for each day of the week and order by the desired order
+
+    day_of_week_query = """
+        SELECT
+            EXTRACT(DAY_OF_WEEK FROM DATE(CAST(year AS VARCHAR) || '-' || CAST(month AS VARCHAR) || '-' || CAST(day AS VARCHAR))) AS day_of_week,
+            COUNT(*) AS trip_count
+        FROM
+            trips_data
+        WHERE
+            year IN (2022, 2023)
+    """
+
+    # Add conditions based on the filter_service_type_id value
+    if filter_service_type_id == "For-Hire":
+        day_of_week_query += " AND type_service = 1"
+    elif filter_service_type_id == "Not For-Hire":
+        day_of_week_query += " AND type_service = 0"
+
+    # Add conditions based on the filter_year value
+    if filter_year == "2022":
+        day_of_week_query += " AND year = 2022"
+    elif filter_year == "2023":
+        day_of_week_query += " AND year = 2023"
+
+    # Define a mapping between numerical values and day names
+    day_name_mapping = {
+        1: 'Sunday',
+        2: 'Monday',
+        3: 'Tuesday',
+        4: 'Wednesday',
+        5: 'Thursday',
+        6: 'Friday',
+        7: 'Saturday'
+    }
+
+ # Use a CASE statement to assign numerical values to days of the week
+    day_of_week_query += """
+        GROUP BY
+            EXTRACT(DAY_OF_WEEK FROM DATE(CAST(year AS VARCHAR) || '-' || CAST(month AS VARCHAR) || '-' || CAST(day AS VARCHAR)))
+        ORDER BY
+            CASE
+            WHEN day_of_week = 2 THEN 1
+            WHEN day_of_week = 3 THEN 2
+            WHEN day_of_week = 4 THEN 3
+            WHEN day_of_week = 5 THEN 4
+            WHEN day_of_week = 6 THEN 5
+            WHEN day_of_week = 7 THEN 6
+            WHEN day_of_week = 1 THEN 7
+            END
+    """
+
+    # Execute the SQL query and fetch the result
+    cursor.execute(day_of_week_query)
+    day_of_week_data = cursor.fetchall()
+
+    # Create a DataFrame from the SQL query result
+    df_day_of_week = pd.DataFrame(day_of_week_data, columns=['day_of_week', 'trip_count'])
+
+    # Map numerical values to day names in the DataFrame
+    df_day_of_week['day_of_week'] = df_day_of_week['day_of_week'].map(day_name_mapping)
+
+    # Create a Plotly Go bar chart (named fig_5)
+    fig_4 = go.Figure(go.Bar(
+        x=df_day_of_week['day_of_week'],
+        y=df_day_of_week['trip_count'],
+        text=df_day_of_week['trip_count'],
+        textposition='outside',
+        marker_color=color_palette  # Use the color palette here
+    ))
+
+    # Update the title and other properties of the bar chart
+    fig_4.update_layout(
+        title='Number of Trips for Each Day of the Week',
+        xaxis_title='Day of the Week',
+        yaxis_title='Number of Trips',
+        width=fig_width,
+        height=fig_height
+    )
+
+    # Display the fig_5 bar chart in your Streamlit app
+    col2.plotly_chart(fig_4)

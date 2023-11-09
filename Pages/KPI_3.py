@@ -306,19 +306,30 @@ def display_KPI_3_page():
     elif filter_year == "2023":
         day_of_week_query += " AND year = 2023"
 
-    # Use a CASE statement to assign numerical values to days of the week
+     # Define a mapping between numerical values and day names
+    day_name_mapping = {
+        1: 'Sunday',
+        2: 'Monday',
+        3: 'Tuesday',
+        4: 'Wednesday',
+        5: 'Thursday',
+        6: 'Friday',
+        7: 'Saturday'
+    }
+
+ # Use a CASE statement to assign numerical values to days of the week
     day_of_week_query += """
         GROUP BY
             EXTRACT(DAY_OF_WEEK FROM DATE(CAST(year AS VARCHAR) || '-' || CAST(month AS VARCHAR) || '-' || CAST(day AS VARCHAR)))
         ORDER BY
             CASE
-                WHEN day_of_week = 2 THEN 1
-                WHEN day_of_week = 3 THEN 2
-                WHEN day_of_week = 4 THEN 3
-                WHEN day_of_week = 5 THEN 4
-                WHEN day_of_week = 6 THEN 5
-                WHEN day_of_week = 7 THEN 6
-                WHEN day_of_week = 1 THEN 7
+            WHEN day_of_week = 2 THEN 1
+            WHEN day_of_week = 3 THEN 2
+            WHEN day_of_week = 4 THEN 3
+            WHEN day_of_week = 5 THEN 4
+            WHEN day_of_week = 6 THEN 5
+            WHEN day_of_week = 7 THEN 6
+            WHEN day_of_week = 1 THEN 7
             END
     """
 
@@ -328,6 +339,9 @@ def display_KPI_3_page():
 
     # Create a DataFrame from the SQL query result
     df_day_of_week = pd.DataFrame(day_of_week_data, columns=['day_of_week', 'trip_count'])
+
+    # Map numerical values to day names in the DataFrame
+    df_day_of_week['day_of_week'] = df_day_of_week['day_of_week'].map(day_name_mapping)
 
     # Create a Plotly Go bar chart (named fig_5)
     fig_4 = go.Figure(go.Bar(

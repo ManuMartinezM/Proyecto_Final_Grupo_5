@@ -187,10 +187,15 @@ def display_KPI_2_page():
     shared_trips = data_2[0][0]
     total_trips = data_2[0][1]
 
+    # Specify the colors for Shared Trips and Total Trips
+    shared_trips_color = '#FFD700'   # Light Orange
+    total_trips_color = '#ADD8E6'  # Light Blue
+
+    # Create the pie chart
     fig_2 = go.Figure(data=[go.Pie(
         labels=["Shared Trips", "Total Trips"],
         values=[shared_trips, total_trips],
-        marker=dict(colors=color_palette)  # Set custom colors
+        marker=dict(colors=[shared_trips_color, total_trips_color])  # Set custom colors
     )])
 
     # Customize the figure layout
@@ -200,5 +205,12 @@ def display_KPI_2_page():
         height=fig_height
     )
 
-    # Show the chart using Streamlit
     col2.plotly_chart(fig_2)
+
+    # Build the WHERE clause for SQL query based on filters
+    where_clause = ""
+    if service_filter != "Both":
+        where_clause += f" AND License_Class = {'1' if service_filter == 'For-Hire' else '0'}"
+    if year_filter != "Both":
+        where_clause += f" AND Year IN (2018, 2019, 2020, 2021, 2022, 2023)"
+

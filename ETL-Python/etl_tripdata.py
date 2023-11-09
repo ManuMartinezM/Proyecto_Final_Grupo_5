@@ -10,23 +10,19 @@ def clean_df(df, service_type):
     df['year'] = df['pickup_datetime'].dt.year
     df['month'] = df['pickup_datetime'].dt.month
     df['day'] = df['pickup_datetime'].dt.day
-
-    hours = (df['pickup_datetime'].dt.hour).astype(str).str.zfill(2)
-    minutes = (df['pickup_datetime'].dt.minute).astype(str).str.zfill(2)
-
-    df['pu_time'] = hours.str.cat(minutes, sep=':')
+    df['hour'] = df['pickup_datetime'].dt.hour
 
     if not 'trip_time' in df.columns:
         # Some service types do not include the trip_time field so we need to compute it
-        df['trip_time'] = df['dropoff_datetime'] - df['pickup_datetime']
-
-    df['type_service'] = 1 if service_type == 'fhvhv' else 0  # 0 stands for 'not for hire vehicle'
-
-    df = do_zone_replacements(df)
+        df['trip_time'] = (df['dropoff_datetime'] - df['pickup_datetime']).dt.total_seconds().astype(int)
 
     # We no longer need the datetimes since we've extracted them into year, month, day and time
     to_drop = ['pickup_datetime', 'dropoff_datetime']
     df.drop(columns=to_drop, inplace=True)
+
+    df['Service_type_id'] = 1 if service_type == 'fhvhv' else 0  # 0 stands for 'not for hire vehicle'
+
+    df = do_zone_replacements(df)
 
     df.drop(df[df['DOLocationID'] == 264].index, inplace=True)
     df.drop(df[df['DOLocationID'] == 265].index, inplace=True)
@@ -44,6 +40,11 @@ def clean_df(df, service_type):
     triptime_outliers = (long_trips.loc[long_trips['total_amount'] < 10]).index
     triptime_outliers.append((df.loc[df['trip_time'] > 9000]).index)
     df.drop(index=triptime_outliers, inplace=True)
+
+    df = df[['PULocationID', 'DOLocationID', 'trip_distance', 'total_amount',
+             'year', 'month', 'day', 'hour', 'trip_time', 'Service_type_id']]
+
+    return df
 
 
 def standardize_df_fields(df, service_type):

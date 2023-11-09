@@ -11,15 +11,21 @@ def display_KPI_3_page():
     st.header("KPI: 5% increase in demand in airport taxi rides")
     st.markdown("***")
 
-    # Replace these values with your database information
-    host = 'database-1.cb8vqbpvimzr.us-east-2.rds.amazonaws.com'
-    user = 'admin'
-    password = 'adminadmin'
-    database = 'NYC_TAXIS'
+    # Define AWS credentials and Athena configuration
+    aws_access_key_id = 'AKIAVXORHVGZHZV2PD53'
+    aws_secret_access_key = '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'
+    athena_database = 'athena-test-db'
+    athena_s3_staging_dir = 's3://taxi-data-smart-analytics/athena/'
+    aws_region = 'us-east-2'
 
-    # Establish a connection to the database
-    connection = pymysql.connect(host=host, user=user, password=password, database=database)
-    cursor = connection.cursor()
+    # Create a connection to Athena
+    conn = pyathena.connect(
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,    
+        s3_staging_dir=athena_s3_staging_dir,
+        schema_name=athena_database,
+        region_name=aws_region
+    ) 
 
     # SQL query for KPI calculation including trips growth
     kpi_query = """
@@ -38,9 +44,10 @@ def display_KPI_3_page():
             AND (PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138)) ) AS final
     """
 
-    # Execute the KPI query and fetch the result
-    cursor.execute(kpi_query)
-    demand_increase = cursor.fetchone()[0]
+    # Execute the SQL query and retrieve the results
+    with conn.cursor() as cursor:
+        cursor.execute(kpi_query)
+        demand_increase = cursor.fetchall()
 
     # Define the title and KPI objective
     title_suffix = "Airport Trips"
@@ -217,7 +224,7 @@ def display_KPI_3_page():
     top_pickup_query = """
         SELECT tz.Zone, COUNT(*) AS trip_count
         FROM trips_data AS td
-        JOIN taxi_zone AS tz
+        JOIN locations AS tz
         ON td.PULocationID = tz.LocationID
         WHERE DOLocationID IN (1, 132, 138)
     """
@@ -327,6 +334,3 @@ def display_KPI_3_page():
 
     # Display the fig_5 bar chart in your Streamlit app
     col2.plotly_chart(fig_4)
-
-    # Close the database connection
-    connection.close()

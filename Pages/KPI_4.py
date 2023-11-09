@@ -11,12 +11,18 @@ def display_KPI_4_page():
     st.header("KPI: 10% increase in average utility for vehicles")
     st.markdown("***")
 
-    # Replace these values with your database information
-    host = 'database-1.cb8vqbpvimzr.us-east-2.rds.amazonaws.com'
-    user = 'admin'
-    password = 'adminadmin'
-    database = 'NYC_TAXIS'
+    # Define AWS credentials and Athena configuration
+    aws_access_key_id = 'AKIAVXORHVGZHZV2PD53'
+    aws_secret_access_key = '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'
+    athena_database = 'athena-test-db'
+    athena_s3_staging_dir = 's3://taxi-data-smart-analytics/athena/'
+    aws_region = 'us-east-2'
 
-    # Establish a connection to the database
-    connection = pymysql.connect(host=host, user=user, password=password, database=database)
-    cursor = connection.cursor()
+    # Create a connection to Athena
+    conn = pyathena.connect(
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,    
+        s3_staging_dir=athena_s3_staging_dir,
+        schema_name=athena_database,
+        region_name=aws_region
+    ) 

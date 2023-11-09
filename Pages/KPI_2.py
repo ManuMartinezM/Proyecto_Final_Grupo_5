@@ -11,30 +11,38 @@ def display_KPI_2_page():
     st.header("KPI: 5% increase in demand for shared rides between 2022 and 2023")
     st.markdown("***")
 
-    # Replace these values with your database information
-    host = 'database-1.cb8vqbpvimzr.us-east-2.rds.amazonaws.com'
-    user = 'admin'
-    password = 'adminadmin'
-    database = 'NYC_TAXIS'
+    # Define AWS credentials and Athena configuration
+    aws_access_key_id = 'AKIAVXORHVGZHZV2PD53'
+    aws_secret_access_key = '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'
+    athena_database = 'athena-test-db'
+    athena_s3_staging_dir = 's3://taxi-data-smart-analytics/athena/'
+    aws_region = 'us-east-2'
 
-    # Establish a connection to the database
-    connection = pymysql.connect(host=host, user=user, password=password, database=database)
-    cursor = connection.cursor()
+    # Create a connection to Athena
+    conn = pyathena.connect(
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,    
+        s3_staging_dir=athena_s3_staging_dir,
+        schema_name=athena_database,
+        region_name=aws_region
+    ) 
+
 
     # Define KPI objective
     kpi_objective = 5  # Adjust this value as needed
 
     # SQL query to calculate shared trips demand for 2022 and 2023
-    sql_query = """
+    kpi_query = """
         SELECT
-            SUM(CASE WHEN Year = 2022 THEN Total_Shared_Trips ELSE 0 END) AS shared_trips_2022,
-            SUM(CASE WHEN Year = 2023 THEN Total_Shared_Trips ELSE 0 END) AS shared_trips_2023
-        FROM data_report_monthly
+            SUM(CASE WHEN Year = 2022 THEN shared_trips_per_day ELSE 0 END) AS shared_trips_2022,
+            SUM(CASE WHEN Year = 2023 THEN shared_trips_per_day ELSE 0 END) AS shared_trips_2023
+        FROM monthly_reports
     """
 
-    # Execute the query
-    cursor.execute(sql_query)
-    shared_trips_data = cursor.fetchone()
+    # Execute the SQL query and retrieve the results
+    with conn.cursor() as cursor:
+        cursor.execute(kpi_query)
+        shared_trips_data = cursor.fetchall()
 
     # Calculate the demand increase
     shared_trips_2022 = shared_trips_data[0]
@@ -94,8 +102,8 @@ def display_KPI_2_page():
     sql_query_1 = f"""
         SELECT
             Year,
-            SUM(Total_Shared_Trips) AS Shared_Trips
-        FROM data_report_monthly
+            SUM(shared_trips_per_day) AS Shared_Trips
+        FROM monthly_reports
         WHERE Year IN (2022, 2023){where_clause}
         GROUP BY Year
     """
@@ -104,7 +112,7 @@ def display_KPI_2_page():
     cursor.execute(sql_query_1)
 
     # Read the SQL query results into a DataFrame
-    df_1 = pd.read_sql(sql_query_1, connection)
+    df_1 = pd.read_sql(sql_query_1, conn)
 
     # Define a custom color palette
     color_palette = ['#ADD8E6', '#90EE90']
@@ -141,9 +149,9 @@ def display_KPI_2_page():
     # Define the SQL query for the pie chart
     sql_query_2 = """
         SELECT
-            SUM(Total_Shared_Trips) AS Shared_Trips,
+            SUM(shared_trips_per_day) AS Shared_Trips,
             SUM(Total_Trips) AS Total_Trips
-        FROM data_report_monthly
+        FROM monthly_reports
         WHERE 1=1
     """
 
@@ -182,12 +190,3 @@ def display_KPI_2_page():
 
     # Show the chart using Streamlit
     col2.plotly_chart(fig_2)
-
-
-
-
-    
-
-    # Close the cursor and connection
-    cursor.close()
-    connection.close()

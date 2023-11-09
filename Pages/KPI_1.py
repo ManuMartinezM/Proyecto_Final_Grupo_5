@@ -12,15 +12,21 @@ def display_KPI_1_page():
     st.header("KPI: 5% increase in demand in For-Hire service")
     st.markdown("***")
 
-    # Replace these values with your database information
-    host = 'database-1.cb8vqbpvimzr.us-east-2.rds.amazonaws.com'
-    user = 'admin'
-    password = 'adminadmin'
-    database = 'NYC_TAXIS'
+    # Define AWS credentials and Athena configuration
+    aws_access_key_id = 'AKIAVXORHVGZHZV2PD53'
+    aws_secret_access_key = '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'
+    athena_database = 'athena-test-db'
+    athena_s3_staging_dir = 's3://taxi-data-smart-analytics/athena/'
+    aws_region = 'us-east-2'
 
-    # Establish a connection to the database
-    connection = pymysql.connect(host=host, user=user, password=password, database=database)
-    cursor = connection.cursor()
+    # Create a connection to Athena
+    conn = pyathena.connect(
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,    
+        s3_staging_dir=athena_s3_staging_dir,
+        schema_name=athena_database,
+        region_name=aws_region
+    ) 
 
     # SQL query for KPI calculation including trips growth
     kpi_query = """
@@ -37,9 +43,10 @@ def display_KPI_1_page():
             WHERE year = 2023) AS final
     """
 
-    # Execute the KPI query and fetch the result
-    cursor.execute(kpi_query)
-    demand_increase = cursor.fetchone()[0]
+    # Execute the SQL query and retrieve the results
+    with conn.cursor() as cursor:
+        cursor.execute(kpi_query)
+        demand_increase = cursor.fetchone()
 
     # Define the title_suffix
     title_suffix = "For-Hire Vehicles"
@@ -47,7 +54,7 @@ def display_KPI_1_page():
     # Define KPI objective
     kpi_objective = 5
 
-   # Create a banner to display the KPI status
+    # Create a banner to display the KPI status
     kpi_style = f"""
         padding: 10px;
         font-size: 20px;
@@ -55,17 +62,17 @@ def display_KPI_1_page():
         color: white;
         display: flex;
         justify-content: space-between;
-        background-color: {"#4CAF50" if demand_increase >= kpi_objective else "#FF5733"};
+        background-color: {"#4CAF50" if demand_increase[0] >= kpi_objective else "#FF5733"};
     """
-    st.markdown(f'<div style="{kpi_style}">Goal: {kpi_objective}%<div>{"KPI goal met!" if demand_increase >= kpi_objective else "KPI not met"}</div></div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="{kpi_style}">Goal: {kpi_objective}%<div>{"KPI goal met!" if demand_increase[0] >= kpi_objective else "KPI not met"}</div></div>', unsafe_allow_html=True)
 
     # Display the KPI banner
-    if demand_increase >= 5:
-        st.success(f'Demand for {title_suffix} service increased by {demand_increase:.2f}%.')
-    elif demand_increase >= 0:
-        st.error(f'Demand for {title_suffix} service increased by only {demand_increase:.2f}%.')
+    if demand_increase[0] >= 5:
+        st.success(f'Demand for {title_suffix} service increased by {demand_increase[0]:.2f}%.')
+    elif demand_increase[0] >= 0:
+        st.error(f'Demand for {title_suffix} service increased by only {demand_increase[0]:.2f}%.')
     else:
-        st.error(f'Demand for {title_suffix} service decreased by {demand_increase:.2f}%.')
+        st.error(f'Demand for {title_suffix} service decreased by {demand_increase[0]:.2f}%.')
 
     # Create selectboxes in the Streamlit sidebar for filtering by "type_service" and "year"
     filter_type_service = st.sidebar.selectbox("Filter by service type", ["Both", "For-Hire", "Not For-Hire"])
@@ -152,11 +159,14 @@ def display_KPI_1_page():
     base_donut_query = """
         SELECT
             CASE
-                WHEN PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138) THEN 'Airport Trips'
-                ELSE 'Other Trips'
+                WHEN type_service = 1 THEN 'For-Hire'
+                WHEN type_service = 0 THEN 'Not For-Hire'
+                ELSE 'Other'
             END AS trip_type,
             COUNT(*) AS trip_count
         FROM trips_data
+        WHERE type_service IN (0, 1)
+        GROUP BY trip_type
     """
 
     # Add conditions to the SQL query based on selected filters
@@ -195,7 +205,7 @@ def display_KPI_1_page():
 
     # Update the title and other properties of the donut chart
     fig_2.update_layout(
-        title='vs. Other Trips',
+        title='Airport Trips vs. Other Trips',
         showlegend=False,
         width=fig_width,
         height=fig_height
@@ -231,7 +241,7 @@ def display_KPI_1_page():
     top_pickup_query += """
         GROUP BY tz.Zone
         ORDER BY trip_count DESC
-        LIMIT 10  # Select the top 10 locations with the most trips
+        LIMIT 10
     """
 
     # Execute the SQL query and fetch the result
@@ -316,6 +326,3 @@ def display_KPI_1_page():
 
     # Display the fig_5 bar chart in your Streamlit app
     col2.plotly_chart(fig_4)
-
-    # Close the database connection
-    connection.close()

@@ -44,13 +44,17 @@ def display_KPI_2_page():
         cursor.execute(kpi_query)
         shared_trips_data = cursor.fetchall()
 
-    # Calculate the demand increase
-    shared_trips_2022 = shared_trips_data[0]
-    shared_trips_2023 = shared_trips_data[1]
-    if shared_trips_2022 == 0:
-        demand_increase = None
+   # Check if shared_trips_data contains at least one row
+    if len(shared_trips_data) > 0:
+        shared_trips_2022 = shared_trips_data[0][0]
+        shared_trips_2023 = shared_trips_data[0][1]
+        if shared_trips_2022 == 0:
+            shared_trips_data = None
+        else:
+            shared_trips_data = ((shared_trips_2023 - shared_trips_2022) / shared_trips_2022) * 100
     else:
-        demand_increase = ((shared_trips_2023 - shared_trips_2022) / shared_trips_2022) * 100
+        # Handle the case where the query did not return the expected data
+        shared_trips_data = None
 
     # Define CSS styles based on KPI status (met or not met)
     kpi_style = f"""
@@ -60,20 +64,12 @@ def display_KPI_2_page():
         color: white;
         display: flex;
         justify-content: space-between;
-        background-color: {"#4CAF50" if demand_increase and demand_increase >= kpi_objective else "#FF5733"};
+        background-color: {"#4CAF50" if shared_trips_data and shared_trips_data >= kpi_objective else "#FF5733"};
     """
 
     # Display the KPI banner
-    st.markdown(f'<div style="{kpi_style}">Goal: {kpi_objective}%<div>{"KPI goal met!" if demand_increase and demand_increase >= kpi_objective else "KPI not met"}</div></div>', unsafe_allow_html=True)
+    st.markdown(f'<div style="{kpi_style}">Goal: {kpi_objective}%<div>{"KPI goal met!" if shared_trips_data and shared_trips_data >= kpi_objective else "KPI not met"}</div></div>', unsafe_allow_html=True)
 
-    # Display the KPI banner
-    title_suffix = "Shared Rides"
-    if demand_increase and demand_increase >= 5:
-        st.success(f'Demand for {title_suffix} increased by {demand_increase:.2f}%.')
-    elif demand_increase and demand_increase >= 0:
-        st.error(f'Demand for {title_suffix} increased by only {demand_increase:.2f}%.')
-    elif demand_increase is not None:
-        st.error(f'Demand for {title_suffix} decreased by {demand_increase:.2f}%.')
 
     # Sidebar filter for Type of Service
     service_filter = st.sidebar.selectbox("Filter by Type of Service", ["Both", "For-Hire", "Not For-Hire"])
@@ -150,7 +146,7 @@ def display_KPI_2_page():
     sql_query_2 = """
         SELECT
             SUM(shared_trips_per_day) AS Shared_Trips,
-            SUM(Total_Trips) AS Total_Trips
+            SUM(trips_per_day) AS trips_per_day
         FROM monthly_reports
         WHERE 1=1
     """

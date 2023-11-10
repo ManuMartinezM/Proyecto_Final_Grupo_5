@@ -5,7 +5,7 @@
 
 ### Dashboard
 
-![Images/Streamlit_Icon.png](http://18.216.27.127:8501/) 
+[![Streamlit Icon](Images/Streamlit_Icon.png)](http://18.216.27.127:8501/)
 
 ### Description
 

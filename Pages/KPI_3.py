@@ -73,25 +73,6 @@ def display_KPI_3_page():
     else:
         st.error(f'Demand for {title_suffix} service decreased by {demand_increase:.2f}%.')
 
-    # Create selectboxes in the Streamlit sidebar for filtering by "type_service" and "year"
-    filter_type_service = st.sidebar.selectbox("Filter by service type", ["Both", "For-Hire", "Not For-Hire"])
-    filter_year = st.sidebar.selectbox("Filter by year", ["Both", "2022", "2023"])
-
-    # Define SQL query based on the selected filter options
-    if filter_type_service == "For-Hire":
-        type_service_condition = "type_service = 1"
-    elif filter_type_service == "Not For-Hire":
-        type_service_condition = "type_service = 0"
-    else:  # "Both" (no filter)
-        type_service_condition = "1=1"
-
-    if filter_year == "2022":
-        year_condition = "year = 2022"
-    elif filter_year == "2023":
-        year_condition = "year = 2023"
-    else:  # "Both" (no filter)
-        year_condition = "1=1"
-
     # Define a custom color palette
     color_palette = ['#ADD8E6', '#90EE90', '#FFA07A', '#D3D3D3', '#FFFFE0', '#87CEEB', '#98FB98', '#FFD700', '#C0C0C0', '#FFA500']
 
@@ -101,14 +82,6 @@ def display_KPI_3_page():
 
     # Create columns to display figures and titles side by side
     col1, col2, col3 = st.columns(3)
-
-    # Add conditions to the SQL query based on selected filters
-    if filter_type_service == "For-Hire":
-        type_service_condition = "AND type_service = 1"
-    elif filter_type_service == "Not For-Hire":
-        type_service_condition = "AND type_service = 0"
-    else:  # "Both" (no filter)
-        type_service_condition = ""
 
     # SQL query for calculating percentage growth of each variable with filter
     growth_query = f"""
@@ -121,12 +94,12 @@ def display_KPI_3_page():
                     SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
             FROM trips_data
             WHERE year = 2022
-            AND (pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138) {type_service_condition}) ) AS initial,
+            AND (pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138)) ) AS initial,
             (SELECT AVG(trip_distance) AS trip_distance, 
                     SUM(total_amount) AS total_amount, COUNT(*) AS total_trips
             FROM trips_data
             WHERE year = 2023
-            AND (pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138) {type_service_condition}) ) AS final
+            AND (pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138)) ) AS final
     """
 
     # Execute the percentage growth query
@@ -164,86 +137,76 @@ def display_KPI_3_page():
     # Display the bar chart in your Streamlit app
     col1.plotly_chart(fig_1)
 
-    # Define the base SQL query to calculate the count of airport trips and non-airport trips
-    base_donut_query = """
+    # Create a radio button for selecting the year for fig_2
+    selected_year_fig_2 = col2.radio("Select Year:", [2022, 2023], key="year_fig_2", horizontal=True)
+
+    # Define the base SQL query to calculate the count of airport trips and non-airport trips for fig_2
+    base_donut_query_fig_2 = f'''
         SELECT
             CASE
-                WHEN pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138) THEN 'Airport Trips'
-                ELSE 'Other Trips'
+                WHEN service_type_id = 1 THEN 'For-Hire'
+                WHEN service_type_id = 0 THEN 'Not For-Hire'
+                ELSE 'Other'
             END AS service_type_id,
             COUNT(*) AS trip_count
         FROM trips_data
+        WHERE year = {selected_year_fig_2}
+        AND (pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138))
+    '''
+
+    # Add GROUP BY for the CASE statement
+    base_donut_query_fig_2 += """
+        GROUP BY
+            CASE
+                WHEN service_type_id = 1 THEN 'For-Hire'
+                WHEN service_type_id = 0 THEN 'Not For-Hire'
+                ELSE 'Other'
+            END
     """
 
-    # Add conditions to the SQL query based on selected filters
-    if filter_type_service == "For-Hire":
-        type_service_condition = "AND type_service = 1"
-    elif filter_type_service == "Not For-Hire":
-        type_service_condition = "AND type_service = 0"
-    else:  # "Both" (no filter)
-        type_service_condition = ""
+    # Execute the donut query for fig_2 and fetch the result
+    cursor.execute(base_donut_query_fig_2)
+    donut_data_fig_2 = cursor.fetchall()
 
-    if filter_year == "2022":
-        year_condition = "AND year = 2022"
-    elif filter_year == "2023":
-        year_condition = "AND year = 2023"
-    else:  # "Both" (no filter)
-        year_condition = ""
+    # Create a DataFrame from the SQL query result for fig_2
+    df_donut_fig_2 = pd.DataFrame(donut_data_fig_2, columns=['service_type_id', 'trip_count'])
 
-    # Combine conditions with the base query
-    donut_query = base_donut_query + f" WHERE 1=1 {type_service_condition} {year_condition} GROUP BY CASE WHEN PULocationID IN (1, 132, 138) OR DOLocationID IN (1, 132, 138) THEN 'Airport Trips' ELSE 'Other Trips' END"
-
-    # Execute the donut query and fetch the result
-    cursor.execute(donut_query)
-    donut_data = cursor.fetchall()
-
-    # Create a DataFrame from the SQL query result
-    df_donut = pd.DataFrame(donut_data, columns=['service_type_id', 'trip_count'])
-
-    # Create a donut chart using Plotly Go with specified colors for slices
+    # Create a donut chart using Plotly Go with specified colors for slices for fig_2
     fig_2 = go.Figure(data=[
         go.Pie(
-            labels=df_donut['service_type_id'],
-            values=df_donut['trip_count'],
+            labels=df_donut_fig_2['service_type_id'],
+            values=df_donut_fig_2['trip_count'],
             marker=dict(colors=color_palette)
         )
     ])
 
-    # Update the title and other properties of the donut chart
+    # Update the title and other properties of the donut chart for fig_2
     fig_2.update_layout(
-        title='Airport Trips vs. Other Trips',
+        title='For-Hire vs. Not For-Hire Airport Trips',
         showlegend=False,  # Hide legend to create a donut chart
         width=fig_width,
         height=fig_height
     )
 
-    # Display the donut chart in your Streamlit app
+    # Display the fig_2 donut chart in your Streamlit app
     col2.plotly_chart(fig_2)
 
+   # Create a radio button for selecting For-Hire or Not For-Hire vehicles
+    selected_vehicle_type = col3.radio("Select Vehicle Type:", ["For-Hire", "Not For-Hire"], horizontal=True)
+
+    # Create a radio button for selecting the year
+    selected_year = col3.radio("Select Year:", [2022, 2023], horizontal=True)
+
     # SQL query to join trips_data with taxi_location_name and count trips to airport destinations
-    top_pickup_query = """
+    top_pickup_query = f"""
         SELECT tz.location_name, COUNT(*) AS trip_count
         FROM trips_data AS td
         JOIN locations AS tz
         ON td.pulocationid = tz.location_id
         WHERE dolocationid IN (1, 132, 138)
+        AND td.service_type_id = {'1' if selected_vehicle_type == 'For-Hire' else '0'}
+        AND td.year = {selected_year}
     """
-
-    # Add conditions based on the filter_type_service value
-    if filter_type_service == "For-Hire":
-        top_pickup_query += " AND td.type_service = 1"
-    elif filter_type_service == "Not For-Hire":
-        top_pickup_query += " AND td.type_service = 0"
-
-    if filter_year == "2022":
-        year_condition = " AND `year` = 2022"
-    elif filter_year == "2023":
-        year_condition = " AND `year` = 2023"
-    else:  # "Both" (no filter)
-        year_condition = ""
-
-    # Add year filter condition
-    top_pickup_query += year_condition
 
     # Combine conditions with the base query
     top_pickup_query += """
@@ -282,31 +245,27 @@ def display_KPI_3_page():
 
     col3.plotly_chart(fig_3)
 
+    # Create a radio button for selecting For-Hire or Not For-Hire vehicles
+    selected_vehicle_type_fig_4 = col2.radio("Select Vehicle Type:", ["For-Hire", "Not For-Hire"], key="vehicle_type_fig_4", horizontal=True)
+
+    # Create a radio button for selecting the year (fig_4)
+    selected_year_fig4 = col2.radio("Select Year:", [2022, 2023], key="year_fig_4", horizontal=True)
+
     # SQL query to count trips for each day of the week and order by the desired order
-    day_of_week_query = """
+    day_of_week_query = f"""
         SELECT
             EXTRACT(DAY_OF_WEEK FROM DATE(CAST(year AS VARCHAR) || '-' || CAST(month AS VARCHAR) || '-' || CAST(day AS VARCHAR))) AS day_of_week,
             COUNT(*) AS trip_count
         FROM
             trips_data
         WHERE
-            year IN (2022, 2023)
+            year = {selected_year_fig4}
             AND (pulocationid IN (1, 132, 138) OR dolocationid IN (1, 132, 138))
+            AND (CASE WHEN '{selected_vehicle_type_fig_4}' = 'For-Hire' THEN service_type_id = 1
+                WHEN '{selected_vehicle_type_fig_4}' = 'Not For-Hire' THEN service_type_id = 0 END)
     """
 
-    # Add conditions based on the filter_type_service value
-    if filter_type_service == "For-Hire":
-        day_of_week_query += " AND type_service = 1"
-    elif filter_type_service == "Not For-Hire":
-        day_of_week_query += " AND type_service = 0"
-
-    # Add conditions based on the filter_year value
-    if filter_year == "2022":
-        day_of_week_query += " AND year = 2022"
-    elif filter_year == "2023":
-        day_of_week_query += " AND year = 2023"
-
-     # Define a mapping between numerical values and day names
+    # Define a mapping between numerical values and day names
     day_name_mapping = {
         1: 'Sunday',
         2: 'Monday',
@@ -317,7 +276,7 @@ def display_KPI_3_page():
         7: 'Saturday'
     }
 
- # Use a CASE statement to assign numerical values to days of the week
+    # Use a CASE statement to assign numerical values to days of the week
     day_of_week_query += """
         GROUP BY
             EXTRACT(DAY_OF_WEEK FROM DATE(CAST(year AS VARCHAR) || '-' || CAST(month AS VARCHAR) || '-' || CAST(day AS VARCHAR)))

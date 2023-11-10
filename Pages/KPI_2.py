@@ -86,11 +86,6 @@ def display_KPI_2_page():
 
     # Handle the case when shared_trips_data is None (no data)
         st.warning(f'No data available to calculate the increase in demand for {title_suffix}.')
-    # Sidebar filter for Type of Service
-    service_filter = st.sidebar.selectbox("Filter by Type of Service", ["Both", "For-Hire", "Not For-Hire"])
-
-    # Sidebar filter for Year
-    year_filter = st.sidebar.selectbox("Filter by Year", ["Both", "2022", "2023"])
 
     # Define a custom color palette
     color_palette = ['#ADD8E6', '#90EE90', '#FFA07A', '#D3D3D3', '#FFFFE0', '#87CEEB', '#98FB98', '#FFD700', '#C0C0C0', '#FFA500']
@@ -102,20 +97,17 @@ def display_KPI_2_page():
     # Create columns to display figures and titles side by side
     col1, col2, col3 = st.columns(3)
 
-    # Build the WHERE clause for SQL query based on filters
-    where_clause = ""
-    if service_filter != "Both":
-        where_clause += f" AND License_Class = {'1' if service_filter == 'For-Hire' else '0'}"
-    if year_filter != "Both":
-        where_clause += f" AND Year = {year_filter}"
+# Add a st.radio filter for vehicle type (For-Hire or Not For-Hire) to fig_1
+    selected_vehicle_type_fig_1 = col1.radio("Select Vehicle Type:", ["For-Hire", "Not For-Hire"], key="vehicle_type_fig_1", horizontal=True)
 
-    # SQL query to calculate shared trips demand
+    # SQL query for the bar chart (fig_1)
     sql_query_1 = f"""
         SELECT
             Year,
             SUM(shared_trips_per_day) AS Shared_Trips
         FROM monthly_reports
-        WHERE Year IN (2022, 2023){where_clause}
+        WHERE Year IN (2022, 2023)
+        AND service_type_id = {'1' if selected_vehicle_type_fig_1 == 'For-Hire' else '0'}
         GROUP BY Year
     """
 
@@ -125,17 +117,7 @@ def display_KPI_2_page():
     # Read the SQL query results into a DataFrame
     df_1 = pd.read_sql(sql_query_1, conn)
 
-    # Define a custom color palette
-    color_palette = ['#ADD8E6', '#90EE90']
-
-    # Define a consistent figure size
-    fig_width = 350
-    fig_height = 450
-
-    # Create columns to display figures and titles side by side
-    col1, col2, col3 = st.columns(3)
-
-    # Create a bar chart using Plotly Go
+    # Create a bar chart using Plotly Go (fig_1)
     fig_1 = go.Figure()
 
     fig_1.add_trace(go.Bar(
@@ -144,7 +126,7 @@ def display_KPI_2_page():
         marker_color=color_palette,
     ))
 
-    # Update the layout
+    # Update the layout for fig_1
     fig_1.update_layout(
         title="Number of Shared Trips",
         xaxis_title="Year",
@@ -157,27 +139,18 @@ def display_KPI_2_page():
     # Show the chart using Streamlit
     col1.plotly_chart(fig_1)
 
-    # Define the SQL query for the pie chart
-    sql_query_2 = """
+    # Create a radio button for selecting the year (fig_2)
+    selected_year_fig2 = col2.radio("Select Year:", [2022, 2023], key="year_fig_2", horizontal=True)
+
+    # Define the SQL query for the pie chart with the selected year
+    sql_query_2 = f"""
         SELECT
             SUM(shared_trips_per_day) AS Shared_Trips,
             SUM(trips_per_day) AS Total_Trips,
             SUM(trips_per_day) AS trips_per_day
         FROM monthly_reports
-        WHERE 1=1
+        WHERE Year = {selected_year_fig2}
     """
-
-    # Modify the query based on the selected filters
-    if service_filter == "For-Hire":
-        sql_query_2 += " AND License_Class = '1'"
-    elif service_filter == "Not For-Hire":
-        sql_query_2 += " AND License_Class = '0'"
-
-    # Use manual formatting for year filter
-    if year_filter == "2022":
-        sql_query_2 += " AND Year = 2022"
-    elif year_filter == "2023":
-        sql_query_2 += " AND Year = 2023"
 
     # Execute the SQL query and fetch the results
     cursor.execute(sql_query_2)
@@ -200,17 +173,52 @@ def display_KPI_2_page():
 
     # Customize the figure layout
     fig_2.update_layout(
-        title="Comparison of Shared Trips vs. Total Trips",
+        title=f"Comparison of Shared Trips vs. Total Trips for {selected_year_fig2}",
         width=fig_width,
         height=fig_height
     )
 
+    # Show the chart using Streamlit
     col2.plotly_chart(fig_2)
 
-    # Build the WHERE clause for SQL query based on filters
-    where_clause = ""
-    if service_filter != "Both":
-        where_clause += f" AND License_Class = {'1' if service_filter == 'For-Hire' else '0'}"
-    if year_filter != "Both":
-        where_clause += f" AND Year IN (2018, 2019, 2020, 2021, 2022, 2023)"
+    # Add a st.radio filter for vehicle type (For-Hire or Not For-Hire) to fig_3
+    selected_vehicle_type_fig_3 = col3.radio("Select Vehicle Type:", ["For-Hire", "Not For-Hire"], key="vehicle_type_fig_3", horizontal=True)
 
+    # SQL query for the count chart (fig_3)
+    sql_query_3 = f"""
+        SELECT
+            Year,
+            SUM(unique_vehicles) AS Total_Unique_Vehicles
+        FROM monthly_reports
+        WHERE Year IN (2022, 2023)
+        AND service_type_id = {'1' if selected_vehicle_type_fig_3 == 'For-Hire' else '0'}
+        GROUP BY Year
+    """
+
+    # Execute the query
+    cursor.execute(sql_query_3)
+
+    # Read the SQL query results into a DataFrame
+    df_3 = pd.read_sql(sql_query_3, conn)
+
+    # Create a bar chart using Plotly Go (fig_3)
+    fig_3 = go.Figure()
+
+    fig_3.add_trace(go.Bar(
+        x=df_3['Year'],
+        y=df_3['Total_Unique_Vehicles'],
+        marker_color=color_palette,
+    ))
+
+    # Update the layout for fig_3
+    fig_3.update_layout(
+        title="Total Unique Vehicles",
+        xaxis_title="Year",
+        yaxis_title="Total Unique Vehicles",
+        xaxis={'type': 'category'},
+        width=fig_width,
+        height=fig_height
+    )
+
+    # Show the chart using Streamlit
+    col3.plotly_chart(fig_3)

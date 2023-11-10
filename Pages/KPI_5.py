@@ -128,17 +128,20 @@ def display_KPI_5_page():
     col1.plotly_chart(fig_1)
 
 
-    # Write SQL query to retrieve average annual emissions for each type of fuel
-    query_2 = """
-    SELECT
-        Fuel,
-        AVG(Annual_emissions_lbs_co2) AS avg_emissions
-    FROM
-        annual_vehicle_emissions
-    WHERE
-        CAST(Year AS varchar) IN ('2022', '2023')
-    GROUP BY
-        Fuel;
+    # Create a radio button for the user to choose the year for average emissions, with "2022" selected by default
+    selected_year_avg_emissions = col2.radio("Select Year for Average Emissions", ["2022", "2023"], index=0, key="year_avg_emissions", horizontal=True)
+
+    # Modify the SQL query to use the selected year
+    query_2 = f"""
+        SELECT
+            Fuel,
+            AVG(Annual_emissions_lbs_co2) AS avg_emissions
+        FROM
+            annual_vehicle_emissions
+        WHERE
+            CAST(Year AS varchar) = '{selected_year_avg_emissions}'
+        GROUP BY
+            Fuel;
     """
 
     # Execute the SQL query and retrieve the results as a DataFrame
@@ -148,10 +151,9 @@ def display_KPI_5_page():
         columns = [desc[0] for desc in cursor.description]
         df_avg_emissions = pd.DataFrame(results, columns=columns)
 
-
     # Create a pie chart using Plotly Go to show the distribution of average annual carbon emissions for each fuel type
     fig_2 = go.Figure(data=[go.Pie(labels=df_avg_emissions['Fuel'], values=df_avg_emissions['avg_emissions'], marker_colors=[color_palette.get(fuel_type, 'gray') for fuel_type in df_avg_emissions['Fuel']])])
-    fig_2.update_layout(title_text='Distribution of Average Annual Carbon Emissions by Fuel Type', width=fig_width, height=fig_height)
+    fig_2.update_layout(title_text=f'Distribution of Average Annual Carbon Emissions by Fuel Type - Year {selected_year_avg_emissions}', width=fig_width, height=fig_height)
 
     # Display the pie chart in the Streamlit app
     col2.plotly_chart(fig_2)
@@ -208,7 +210,4 @@ def display_KPI_5_page():
     # Display the radio button and the bar chart in the Streamlit app
     col3.plotly_chart(fig_3)
 
-
-
-
-
+   

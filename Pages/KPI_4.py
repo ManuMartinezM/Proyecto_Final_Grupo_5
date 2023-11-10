@@ -142,48 +142,55 @@ def display_KPI_4_page():
 
     col3.plotly_chart(fig_1)
 
-    # Sample SQL query for utility calculation
-    query_utility = """
+    # Sample SQL query for brand utility rate calculation
+    query_brand_utility = """
         SELECT
-            Fuel,
+            Year,
+            Brand,
+            Fuel,  -- Include the 'Fuel' column in the SELECT statement
             AVG(vehicle_price / Cost_per_mile) AS Utility
         FROM
             annual_vehicle_emissions
         WHERE
-            Year = 2023
+            Year IN (2022, 2023)
             AND (Fuel = 'EV' OR Fuel LIKE '%Hybrid%')
         GROUP BY
-            Fuel
+            Year, Brand, Fuel
     """
 
     # Execute the SQL query and load data into a DataFrame
-    df_utility = pd.read_sql_query(query_utility, conn)
+    df_brand_utility = pd.read_sql_query(query_brand_utility, conn)
 
-    # Color palette
-    color_palette = {'Gasoline': '#FFA07A', 'EV': '#90EE90', 'Hybrid': '#ADD8E6'}
+    # Create a radio button for the user to choose the fuel type, with the default as "EV"
+    selected_fuel_brand = col2.radio("Select Fuel Type for Brand Utility", df_brand_utility['Fuel'].unique(), index=0, key="fuel_brand", horizontal=True)
 
-    # Create Plotly pie chart
+    # Create a radio button for the user to choose the year, with "Both" selected by default
+    selected_year_brand = col2.radio("Select Year for Brand Utility", [2022, 2023], index=1, key="year_brand", horizontal=True)
+
+    # Filter the DataFrame based on the selected fuel type and year
+    df_brand_utility_filtered = df_brand_utility[(df_brand_utility['Fuel'] == selected_fuel_brand) & (df_brand_utility['Year'] == selected_year_brand)].nlargest(5, 'Utility')
+
+    # Create Plotly bar chart for brand utility rate
     fig_2 = go.Figure()
 
     fig_2.add_trace(
-        go.Pie(
-            labels=df_utility['Fuel'],
-            values=df_utility['Utility'],
-            marker=dict(colors=[color_palette[fuel] for fuel in df_utility['Fuel']]),
-            hole=0.3,
-            textinfo='label+percent',
-            hoverinfo='label+percent'
+        go.Bar(
+            x=df_brand_utility_filtered['Brand'],
+            y=df_brand_utility_filtered['Utility'],
+            marker_color=color_palette[selected_fuel_brand]
         )
     )
 
     # Update layout for better visibility
     fig_2.update_layout(
-        title='Fuel Type Utility Comparison',
+        title=f'Top 5 Brands - {selected_fuel_brand} Fuel Type - Year {selected_year_brand}',
+        xaxis_title='Brand',
+        yaxis_title='Utility Rate',
         width=fig_width,
         height=fig_height
     )
 
-    # Display the pie chart
+    # Display the bar chart
     col2.plotly_chart(fig_2)
 
     # Sample SQL query for average cost_per_mile calculation

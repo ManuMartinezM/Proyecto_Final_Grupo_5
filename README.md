@@ -3,6 +3,10 @@
 
 ![Cover](Images/NYC_Taxis.jpg)
 
+### Dashboard
+
+![Images/Streamlit_Icon.png](http://18.216.27.127:8501/) 
+
 ### Description
 
 Welcome to the data-driven analysis of a prospective business venture in the bustling city of New York. In this project, we take on the role of data scientists, partnering with a well-established transportation company that specializes in long-distance passenger travel, primarily using large-volume vehicles like buses. The company has set its sights on expanding its services by venturing into short-distance passenger travel within New York City. Their vision is to introduce a green and environmentally friendly mode of transportation, utilizing electric or hybrid vehicles, particularly for shared rides serving the city's three major airports.
@@ -24,10 +28,10 @@ As we progress through our analysis, we will diligently record and share our fin
 
 ![KPI](Images/KPI.png)
 
-## KPI 1: 5% increase in demand for the type of service contracted
+## KPI 1: 2% increase in demand for the type of service contracted
 
 ### Description:
-Evaluate the 5% increase in demand for contracted service-type trips compared to non-contracted services between 2022 and 2023.
+Evaluate the 2% increase in demand for contracted service-type trips compared to non-contracted services between 2022 and 2023.
 
 ### Associated Metrics:
 - Annual count of trips categorized by service type.
@@ -69,7 +73,7 @@ Assess the feasibility of implementing an airport-exclusive transportation servi
 ## KPI 4: 10% increase in the average utility for vehicles
 
 ### Description:
-Evaluate the 10% increase in the average utility (lifespan / cost in dollars) of the Top 10 electric vehicles compared to the Top 10 hybrid vehicles between 2022 and 2023.
+Evaluate the 10% increase in the average utility (total purchasing cost / cost per mile) of the Top 10 electric vehicles compared to the Top 10 hybrid vehicles between 2022 and 2023.
 
 ### Associated Metrics:
 - Travel time (average duration).
@@ -189,7 +193,7 @@ Libraries:
 
 ## Database
 
-### ![Amazon S3 Logo](Images/Amazon_S3_Icon.png) Amazon Aurora MySQL
+### ![Amazon Aurora Logo](Images/Amazon_Aurora_Icon.png) Amazon Aurora MySQL
 
 ## Dashboard
 

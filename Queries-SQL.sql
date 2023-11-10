@@ -28,7 +28,8 @@ CREATE TABLE if not exists monthly_reports(
     Shared_trips_per_day INT,
     Unique_vehicles VARCHAR(50),
     FOREIGN KEY(Service_type_id) REFERENCES service_types(Service_type_id));
-
+    
+    
 DROP TABLE IF EXISTS annual_vehicle_emissions;
 CREATE TABLE IF NOT EXISTS annual_vehicle_emissions (
     Vehicle_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -43,6 +44,7 @@ CREATE TABLE IF NOT EXISTS annual_vehicle_emissions (
     Cost_per_mile DECIMAL(10, 2),
     Annual_emissions_lbs_co2 DECIMAL(10, 2)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
 
 # Trips data
 drop table if exists trips_data;

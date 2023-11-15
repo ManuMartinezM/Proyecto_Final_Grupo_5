@@ -3,6 +3,10 @@
 
 ![Cover](Images/NYC_Taxis.jpg)
 
+### Demo video
+
+[![Watch the video](https://img.youtube.com/vi/51vWDI-IlTE/maxresdefault.jpg)](https://www.youtube.com/watch?v=51vWDI-IlTE)
+
 ### Dashboard
 
 [![Streamlit Icon](Images/Streamlit_Icon.png)](http://18.216.27.127:8501/)
